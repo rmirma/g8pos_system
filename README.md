@@ -5,7 +5,7 @@
 3. <Oliver Pikani>
 
 ## Homework 1:
-<When you finish your homework, add a link pointing to the solution here (for example, a link to a page on the wiki)> 
+https://bitbucket.org/ajutinenimi/lg8-javaenjoyers/wiki/hw1
 
 ## Homework 2:
 <Links to the solution>
