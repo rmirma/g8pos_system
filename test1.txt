@@ -2,3 +2,4 @@ This is a test file for merge conflict
 Hope nothing bad happens :)
 This an edit by Robin
 This wont make a merge conflict :)
+This is s new line of random text.
