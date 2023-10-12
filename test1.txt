@@ -1,2 +1,1 @@
-This is a test file for merge conflict
-Hope nothing bad happens :)
+This is s new line of random text.
