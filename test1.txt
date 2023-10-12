@@ -4,3 +4,4 @@ This an edit by Robin
 This wont make a merge conflict :)
 This is s new line of random text.
 This line is for closing the issue
+This line is for closing the issue for real this time
