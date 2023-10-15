@@ -19,12 +19,10 @@
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="218.0" styleClass="sub_background" stylesheets="@DefaultTheme.css">
                                             <children>
                                                 <Text fx:id="teamname" layoutX="124.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Not found" wrappingWidth="97.33667755126953" />
-                                                <Text fx:id="teamleader" layoutX="124.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Not found" wrappingWidth="97.33667755126953" />
-                                                <Text fx:id="mail" layoutX="124.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Not found" wrappingWidth="169.33673858642578" />
+                                                <Text fx:id="leader" layoutX="124.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Not found" wrappingWidth="97.33667755126953" />
                                                 <Text fx:id="teammembers" layoutX="124.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Not found" wrappingWidth="120.53668975830078" />
                                                 <Text layoutX="11.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team name:" wrappingWidth="97.33667755126953" />
                                                 <Text layoutX="12.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team leader:" wrappingWidth="97.33667755126953" />
-                                                <Text layoutX="12.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team leader email:" wrappingWidth="105.33670806884766" />
                                                 <Text layoutX="13.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team members:" wrappingWidth="94.13666534423828" />
                                                 <ImageView fx:id="teamlogo" fitHeight="171.0" fitWidth="238.0" layoutX="345.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="-18.80000000000001" AnchorPane.leftAnchor="335.0" AnchorPane.rightAnchor="14.600000000000023" AnchorPane.topAnchor="9.200000000000017" />
                                             </children>

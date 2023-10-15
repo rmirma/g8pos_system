@@ -18,8 +18,8 @@ public class TeamController implements Initializable{
     private String teamName;
 
     @FXML
-    private Text mail = new Text();
-    private String Mail;
+    private Text leader = new Text();
+    private String teamLeader;
 
     @FXML
     private Text teammembers = new Text();
@@ -48,7 +48,7 @@ public class TeamController implements Initializable{
             teamMember2 = pros.getProperty("teamMember2");
             teamMember3 = pros.getProperty("teamMember3");
             teamMember4 = pros.getProperty("teamMember4");
-            Mail = pros.getProperty("teamEmail");
+            teamLeader = pros.getProperty("teamLeader");
             teamLogo = pros.getProperty("teamLogo");
             ip.close();
         }
@@ -60,7 +60,7 @@ public class TeamController implements Initializable{
     public void initialize(URL location, ResourceBundle resources)  {
         this.teamname.setText(teamName);
         this.teammembers.setText(teamMember1 + "\n" + teamMember2 + "\n" + teamMember3 + "\n" + teamMember4);
-        this.mail.setText(Mail);
+        this.leader.setText(teamLeader);
         this.teamlogo.setImage(new Image(teamLogo));
     }
 
