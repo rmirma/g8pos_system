@@ -19,8 +19,8 @@ public class ShoppingCart {
      * Add new SoldItem to table.
      */
     public void addItem(SoldItem item) {
-        // TODO In case such stockItem already exists increase the quantity of the existing stock
-        // TODO verify that warehouse items' quantity remains at least zero or throw an exception
+        //TODO In case such stockItem already exists increase the quantity of the existing stock
+        // verify that warehouse items' quantity remains at least zero or throw an exception
 
         items.add(item);
         //log.debug("Added " + item.getName() + " quantity of " + item.getQuantity());
@@ -36,6 +36,8 @@ public class ShoppingCart {
 
     public void submitCurrentPurchase() {
         // TODO decrease quantities of the warehouse stock
+        //TODO change dao.saveSoldItem() so it would add a historyItem
+        // instead of SoldItem (check HistroyItem and DAO)
 
         // note the use of transactions. InMemorySalesSystemDAO ignores transactions
         // but when you start using hibernate in lab5, then it will become relevant.
@@ -43,7 +45,7 @@ public class ShoppingCart {
         dao.beginTransaction();
         try {
             for (SoldItem item : items) {
-                dao.saveSoldItem(item);
+                //dao.saveSoldItem(item);   TODO change so it would take in new HistoryItem()
             }
             dao.commitTransaction();
             items.clear();
