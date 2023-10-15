@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
 
-
-<TitledPane alignment="CENTER" animated="false" collapsible="false" text="History" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1">
+<TitledPane alignment="CENTER" animated="false" collapsible="false" text="History" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
     <BorderPane>
         <!-- The history view/purchase history -->
         <center>
@@ -71,9 +67,19 @@
             </TableView>
         </bottom>
         <!-- top pane for buttons -->
-        <top>
-            <Button text="Show between dates" BorderPane.alignment="TOP_LEFT" />
+        <top> <!-- TODO add Pane to add buttons -->
+            <HBox alignment="CENTER">
+                <VBox alignment="CENTER_LEFT" prefHeight="78.0" prefWidth="253.0" spacing="5">
+                    <Button text="Show all"/>
+                    <Button text="Show last 10"/>
+                    <Button text="Show between dates"/>
+                </VBox>
+                <VBox alignment="CENTER_RIGHT" prefHeight="78.0" prefWidth="125.0" spacing="5">
+
+                    <Button text="Show between dates"/>
+                </VBox>
+            </HBox>
+            <!-- <Button text="Show between dates" BorderPane.alignment="TOP_LEFT" /> -->
         </top>
     </BorderPane>
 </TitledPane>
-
