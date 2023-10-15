@@ -4,6 +4,8 @@
 <?import javafx.scene.control.cell.*?>
 <?import javafx.scene.layout.*?>
 
+<!-- TODO add eventhandlers to tags -->
+
 <TitledPane alignment="CENTER" animated="false" collapsible="false" text="History" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
     <BorderPane>
         <!-- The history view/purchase history -->
