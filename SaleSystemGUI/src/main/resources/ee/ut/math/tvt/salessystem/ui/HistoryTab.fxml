@@ -66,20 +66,21 @@
                 </columnResizePolicy>
             </TableView>
         </bottom>
-        <!-- top pane for buttons -->
-        <top> <!-- TODO add Pane to add buttons -->
+        <!-- top pane for buttons and calendar-->
+        <top>
             <HBox alignment="CENTER">
+                <!-- buttons on right side -->
                 <VBox alignment="CENTER_LEFT" prefHeight="78.0" prefWidth="253.0" spacing="5">
-                    <Button text="Show all"/>
-                    <Button text="Show last 10"/>
-                    <Button text="Show between dates"/>
+                    <Button prefWidth="150" text="Show all" />
+                    <Button prefWidth="150" text="Show last 10" />
+                    <Button prefWidth="150" text="Show between dates" />
                 </VBox>
+                <!-- date selectors -->
                 <VBox alignment="CENTER_RIGHT" prefHeight="78.0" prefWidth="125.0" spacing="5">
-
-                    <Button text="Show between dates"/>
+               <DatePicker promptText="Start date" />
+               <DatePicker layoutX="10.0" layoutY="40.0" promptText="end date" />
                 </VBox>
             </HBox>
-            <!-- <Button text="Show between dates" BorderPane.alignment="TOP_LEFT" /> -->
         </top>
     </BorderPane>
 </TitledPane>
