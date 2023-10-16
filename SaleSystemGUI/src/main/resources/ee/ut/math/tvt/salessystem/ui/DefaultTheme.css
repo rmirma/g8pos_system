@@ -5,6 +5,7 @@
   sb_color_f: #45ba8e59;
   main_text_color: #000;
   control_color: #4571ba;
+  selected_color: #b0ceff;
   title_color: #4571ba80;
   -text-color: #000;
 }
@@ -56,7 +57,7 @@
 }
 
 .text-field:focused{
-  -fx-background-color: b_color;
+  -fx-background-color: selected_color;
 }
 
 
@@ -143,12 +144,11 @@
  */
 
 .tab-pane > .tab-header-area > .headers-region > .tab:selected:top {
-  -fx-background-color: b_color;
-  -fx-border-color:title_color;
+  -fx-background-color: selected_color;
 }
 
 .tab-pane > .tab-header-area > .headers-region > .tab:hover:top {
-  -fx-background-color: b_color;
+  -fx-background-color: selected_color;
 }
 
 .tab-pane > .tab-header-area > .headers-region > .tab:top {
@@ -172,24 +172,27 @@
   -fx-background-color: title_color
 }
 
-.tab-pane
-{
+.tab-pane {
   -fx-tab-min-width:50px;
   -fx-background-color: b_color;
   -fx-text-fill: main_text_color;
+
 }
 
 .tab{
-  -fx-background-insets: 0 1 0 1,0,0;
+  -fx-background-insets: 0 5px 5px 5px;
+  -fx-padding: 0 20px 5px 20px;
+  -fx-background-radius: 5px;
   -fx-background-color: control_color;
   -fx-color: control_color;
   -fx-text-fill: main_text_color;
+  -fx-focus-color: transparent;
+  -fx-faint-focus-color: transparent;
 }
 
 .tab-pane .tab
 {
   -fx-background-color: control_color;
-  -fx-border-color:title_color;
 }
 
 .tab-pane .tab:selected
@@ -238,11 +241,8 @@
 
 .button {
   -fx-padding: 5 22 5 22;
-  -fx-border-color: title_color;
-  -fx-border-width: 2;
-  -fx-border-insets: 1;
 
-  -fx-background-radius: 0.5;
+  -fx-background-radius: 5px;
 
   -fx-background-color: control_color;
 
@@ -253,7 +253,7 @@
 }
 
 .button:hover{
-  -fx-background-color: #3a3a3a;
+  -fx-background-color: selected_color;
 }
 
 
@@ -725,21 +725,21 @@
 }
 
 .combo-box-popup .list-view .list-cell:hover{
-  -fx-background-color: b_color;
+  -fx-background-color: selected_color;
   -fx-text-fill: #1d1d1d;
 }
 
 .combo-box-popup .list-view .list-cell:filled:selected{
-  -fx-background-color: b_color;
+  -fx-background-color: selected_color;
 }
 
 .combo-box-popup .list-view .list-cell:filled:selected:hover {
-  -fx-background-color: b_color;
+  -fx-background-color: selected_color;
 }
 
 .combo-box-popup .list-view .list-cell:filled:pressed, .combo-box-popup .list-view .list-cell:filled:selected:pressed
 {
-  -fx-background-color: b_color;
+  -fx-background-color: selected_color;
 }
 
 /*******************************************************************************

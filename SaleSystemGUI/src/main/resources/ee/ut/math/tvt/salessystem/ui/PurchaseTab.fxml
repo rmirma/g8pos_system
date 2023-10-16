@@ -15,12 +15,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
 
   <SplitPane dividerPositions="0.4" orientation="VERTICAL" prefHeight="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
     <items>
       <AnchorPane prefHeight="200.0" styleClass="background_style" SplitPane.resizableWithParent="false">
-        <HBox alignment="TOP_CENTER" prefHeight="26.0" prefWidth="308.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
+        <HBox alignment="TOP_CENTER" prefHeight="26.0" prefWidth="308.0" spacing="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
           <children>
             <Button fx:id="newPurchase" onAction="#newPurchaseButtonClicked" text="New Purchase" />
             <Button fx:id="submitPurchase" onAction="#submitPurchaseButtonClicked" text="Confirm" />
@@ -53,6 +53,9 @@
                         <ColumnConstraints />
                         <ColumnConstraints />
                         <ColumnConstraints />
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                        <ColumnConstraints />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -65,6 +68,9 @@
               </rowConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
                         <RowConstraints />
                         <RowConstraints />
                         <RowConstraints />
