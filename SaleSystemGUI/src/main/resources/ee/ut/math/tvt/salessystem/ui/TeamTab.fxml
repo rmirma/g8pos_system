@@ -2,38 +2,70 @@
 
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <SplitPane dividerPositions="0.503140703517588" layoutX="-12.0" layoutY="1.0" orientation="VERTICAL" styleClass="background_style" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" styleClass="background_style" SplitPane.resizableWithParent="false">
                     <children>
-                        <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                            <children>
-                                <TitledPane alignment="CENTER" animated="false" collapsible="false" prefHeight="231.2" text="Team info" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                    <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="218.0" styleClass="sub_background" stylesheets="@DefaultTheme.css">
-                                            <children>
-                                                <Text fx:id="teamname" layoutX="124.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Not found" wrappingWidth="97.33667755126953" />
-                                                <Text fx:id="leader" layoutX="124.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Not found" wrappingWidth="97.33667755126953" />
-                                                <Text fx:id="teammembers" layoutX="124.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Not found" wrappingWidth="120.53668975830078" />
-                                                <Text layoutX="11.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team name:" wrappingWidth="97.33667755126953" />
-                                                <Text layoutX="12.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team leader:" wrappingWidth="97.33667755126953" />
-                                                <Text layoutX="13.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team members:" wrappingWidth="94.13666534423828" />
-                                                <ImageView fx:id="teamlogo" fitHeight="171.0" fitWidth="238.0" layoutX="345.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="-18.80000000000001" AnchorPane.leftAnchor="335.0" AnchorPane.rightAnchor="14.600000000000023" AnchorPane.topAnchor="9.200000000000017" />
-                                            </children>
-                                        </AnchorPane>
-                                    </content>
-                                </TitledPane>
-                            </children>
-                        </AnchorPane>
+                          <TitledPane alignment="CENTER" animated="false" collapsible="false" text="Team info" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <content>
+                        <SplitPane dividerPositions="0.29797979797979796">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0">
+                                 <children>
+                                    <SplitPane dividerPositions="0.29797979797979796" styleClass="teamInfo" stylesheets="@DefaultTheme.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <items>
+                                        <AnchorPane>
+                                             <children>
+                                                <VBox spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                                                   <children>
+                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Team name:" wrappingWidth="91.0" />
+                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Team leader:" wrappingWidth="96.0" />
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Team leader email:" wrappingWidth="127.0" />
+                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Team members:" wrappingWidth="108.0" />
+                                                   </children>
+                                                </VBox>
+                                             </children>
+                                          </AnchorPane>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0">
+                                             <children>
+                                                <VBox spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                                                   <children>
+                                                      <Text fx:id="teamname" strokeType="OUTSIDE" strokeWidth="0.0" text="id=teamname" wrappingWidth="270.0" />
+                                                      <Text fx:id="leader" strokeType="OUTSIDE" strokeWidth="0.0" text="id=leader" wrappingWidth="270.0" />
+                                                      <Text fx:id="leaderemail" strokeType="OUTSIDE" strokeWidth="0.0" text="id=leaderemail" wrappingWidth="270.0" />
+                                                      <Text fx:id="teammembers" strokeType="OUTSIDE" strokeWidth="0.0" text="id=teammembers" wrappingWidth="270.0" />
+                                                   </children>
+                                                </VBox>
+                                             </children>
+                                          </AnchorPane>
+                                      </items>
+                                    </SplitPane>
+                                 </children>
+                              </AnchorPane>
+                            <AnchorPane maxHeight="-Infinity" maxWidth="223.0" minHeight="0.0" minWidth="0.0" SplitPane.resizableWithParent="false">
+                                 <children>
+                                                <ImageView fx:id="teamlogo" fitWidth="223.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <image>
+                                          <Image url="@../../../../../../../../../../src/main/resources/logo.jpeg" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
+                          </items>
+                        </SplitPane>
+                     </content>
+                          </TitledPane>
                     </children>
                 </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="234.0" SplitPane.resizableWithParent="false" />
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="598.0" SplitPane.resizableWithParent="false" />
             </items>
         </SplitPane>
     </children>
