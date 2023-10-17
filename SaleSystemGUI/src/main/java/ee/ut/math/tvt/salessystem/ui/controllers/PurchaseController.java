@@ -11,12 +11,14 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -42,14 +44,14 @@ public class PurchaseController implements Initializable {
     @FXML
     private TextField quantityField;
     @FXML
-    private TextField nameField;
+    private ComboBox nameSelector;
     @FXML
     private TextField priceField;
     @FXML
     private Button addItemButton;
     @FXML
     private TableView<SoldItem> purchaseTableView;
-
+    private List<StockItem> items;
     public PurchaseController(SalesSystemDAO dao, ShoppingCart shoppingCart) {
         this.dao = dao;
         this.shoppingCart = shoppingCart;
@@ -57,10 +59,14 @@ public class PurchaseController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Add items to combobox
+        dao.findStockItems().stream().map(StockItem::getName).forEach(name -> nameSelector.getItems().add(name));
         cancelPurchase.setDisable(true);
         submitPurchase.setDisable(true);
         purchaseTableView.setItems(FXCollections.observableList(shoppingCart.getAll()));
         disableProductField(true);
+        this.priceField.setDisable(true);
+        this.barCodeField.setDisable(true);
 
         this.barCodeField.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -135,7 +141,7 @@ public class PurchaseController implements Initializable {
     private void fillInputsBySelectedStockItem() {
         StockItem stockItem = getStockItemByBarcode();
         if (stockItem != null) {
-            nameField.setText(stockItem.getName());
+            //nameSelector.setText(stockItem.getName());
             priceField.setText(String.valueOf(stockItem.getPrice()));
         } else {
             resetProductField();
@@ -173,14 +179,25 @@ public class PurchaseController implements Initializable {
     }
 
     /**
+     * Display items in drop-down menu
+     */
+    @FXML
+    public void selectItemEventHandler(){
+        String productName = nameSelector.getValue().toString();
+        /*
+        StockItem stockItem = dao.findStockItem(productName);
+        barCodeField.setText(stockItem.getId());
+        priceField.setText(stockItem.getPrice());
+         */
+    }
+
+    /**
      * Sets whether or not the product component is enabled.
      */
     private void disableProductField(boolean disable) {
         this.addItemButton.setDisable(disable);
-        this.barCodeField.setDisable(disable);
         this.quantityField.setDisable(disable);
-        this.nameField.setDisable(disable);
-        this.priceField.setDisable(disable);
+        this.nameSelector.setDisable(disable);
     }
 
     /**
@@ -189,7 +206,7 @@ public class PurchaseController implements Initializable {
     private void resetProductField() {
         barCodeField.setText("");
         quantityField.setText("1");
-        nameField.setText("");
+        //nameSelector.setText("");
         priceField.setText("");
     }
 }

@@ -5,6 +5,7 @@
   sb_color_f: #45ba8e59;
   main_text_color: #000;
   control_color: #4571ba;
+  selected_color: #b0ceff;
   title_color: #4571ba80;
   -text-color: #000;
 }
@@ -14,6 +15,9 @@
 }
 
 .sub_background{
+  -fx-background-color: linear-gradient(to bottom right, #ba8e4599, #45ba8e7f);
+}
+.teamInfo{
   -fx-background-color: linear-gradient(to bottom right, #ba8e4599, #45ba8e7f);
 }
 
@@ -56,8 +60,9 @@
 }
 
 .text-field:focused{
-  -fx-background-color: #4571ba8f;
+  -fx-background-color: selected_color;
 }
+
 
 /*
  * BorderPane
@@ -75,7 +80,8 @@
 .split-pane .split-pane-divider  {
   -fx-border-color: title_color;
   -fx-background-insets: 0;
-  -fx-pref-width: 1
+  -fx-pref-width: 0
+
 }
 
 /*
@@ -142,12 +148,11 @@
  */
 
 .tab-pane > .tab-header-area > .headers-region > .tab:selected:top {
-  -fx-background-color: b_color;
-  -fx-border-color:title_color;
+  -fx-background-color: selected_color;
 }
 
 .tab-pane > .tab-header-area > .headers-region > .tab:hover:top {
-  -fx-background-color: b_color;
+  -fx-background-color: selected_color;
 }
 
 .tab-pane > .tab-header-area > .headers-region > .tab:top {
@@ -171,24 +176,27 @@
   -fx-background-color: title_color
 }
 
-.tab-pane
-{
+.tab-pane {
   -fx-tab-min-width:50px;
   -fx-background-color: b_color;
   -fx-text-fill: main_text_color;
+
 }
 
 .tab{
-  -fx-background-insets: 0 1 0 1,0,0;
+  -fx-background-insets: 0 5px 5px 5px;
+  -fx-padding: 0 20px 5px 20px;
+  -fx-background-radius: 5px;
   -fx-background-color: control_color;
   -fx-color: control_color;
   -fx-text-fill: main_text_color;
+  -fx-focus-color: transparent;
+  -fx-faint-focus-color: transparent;
 }
 
 .tab-pane .tab
 {
   -fx-background-color: control_color;
-  -fx-border-color:title_color;
 }
 
 .tab-pane .tab:selected
@@ -237,11 +245,8 @@
 
 .button {
   -fx-padding: 5 22 5 22;
-  -fx-border-color: title_color;
-  -fx-border-width: 2;
-  -fx-border-insets: 1;
 
-  -fx-background-radius: 0.5;
+  -fx-background-radius: 5px;
 
   -fx-background-color: control_color;
 
@@ -252,7 +257,7 @@
 }
 
 .button:hover{
-  -fx-background-color: #3a3a3a;
+  -fx-background-color: selected_color;
 }
 
 
@@ -683,19 +688,14 @@
  ******************************************************************************/
 
 .combo-box-base  {
-  -fx-background-color: transparent, #e2e2e2, transparent, #4a4a4a;
-  -fx-background-radius: 0, 0, 0, 0;
-  -fx-padding: 0.166667em; /* 2 */
+  -fx-background-color: control_color;
+  -fx-background-radius: 5px;
 }
 
 .combo-box-base  .list-cell{
-  -fx-text-fill: white;
+  -fx-text-fill: #000;
 }
 
-.combo-box-base:hover {
-  -fx-background-color: transparent, white, transparent, #4a4a4a;
-
-}
 
 /*.combo-box-base:focused {
     -fx-background-color: -fx-focus-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
@@ -720,34 +720,30 @@
 }
 
 .combo-box-popup .list-view {
-  -fx-background-color: #4a4a4a, -fx-control-inner-background;
+  -fx-background-color: control_color;
   -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0) , 8, 0.0 , 0 , 0 );
 }
 
 .combo-box-popup .list-view .list-cell{
-  -fx-background-color: #4a4a4a;
-  -fx-text-fill: white;
+  -fx-background-color: control_color;
 }
 
 .combo-box-popup .list-view .list-cell:hover{
-  -fx-background-color: #dedede;
+  -fx-background-color: selected_color;
   -fx-text-fill: #1d1d1d;
 }
 
-
-
 .combo-box-popup .list-view .list-cell:filled:selected{
-  -fx-background-color: #55c4fe;
+  -fx-background-color: selected_color;
 }
 
 .combo-box-popup .list-view .list-cell:filled:selected:hover {
-  -fx-background-color: #6dcdff;
+  -fx-background-color: selected_color;
 }
 
 .combo-box-popup .list-view .list-cell:filled:pressed, .combo-box-popup .list-view .list-cell:filled:selected:pressed
 {
-  -fx-background-color: #d3d3d3;
-  -fx-text-fill: #1d1d1d;
+  -fx-background-color: selected_color;
 }
 
 /*******************************************************************************
