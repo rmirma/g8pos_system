@@ -5,6 +5,7 @@ import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class InMemorySalesSystemDAO implements SalesSystemDAO {
 
@@ -33,6 +34,16 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
                 return item;
         }
         return null;
+    }
+    @Override
+    public List<StockItem> findStockItem(String name) {
+        List<StockItem> stockItems = new ArrayList<>();
+        for (StockItem item : stockItemList) {
+            if (Objects.equals(item.getName(), name)) {
+                stockItems.add(item);
+            }
+        }
+        return stockItems;
     }
 
     @Override
