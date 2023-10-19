@@ -80,13 +80,15 @@ public class ConsoleUI {
     private void printUsage() {
         System.out.println("-------------------------");
         System.out.println("Usage:");
-        System.out.println("h\t\tShow this help");
-        System.out.println("w\t\tShow warehouse contents");
-        System.out.println("c\t\tShow cart contents");
+        System.out.println("h\t\t\tShow this help");
+        System.out.println("w\t\t\tShow warehouse contents");
+        System.out.println("n [name] [price] [amount]\tAdd new product to warehouse");
+        System.out.println("rm IDX\t\tRemove product with index IDX from warehouse");
+        System.out.println("c\t\t\tShow cart contents");
         System.out.println("a IDX NR \tAdd NR of stock item with index IDX to the cart");
-        System.out.println("p\t\tPurchase the shopping cart");
-        System.out.println("r\t\tReset the shopping cart");
-        System.out.println("t\t\tShow team info");
+        System.out.println("p\t\t\tPurchase the shopping cart");
+        System.out.println("r\t\t\tReset the shopping cart");
+        System.out.println("t\t\t\tShow team info");
         System.out.println("-------------------------");
     }
 
@@ -107,6 +109,10 @@ public class ConsoleUI {
             cart.cancelCurrentPurchase();
         else if (c[0].equals("t"))
             showTeam();
+        else if (c[0].equals("rm")&& c.length == 2)
+            removeProduct(c[1]);
+        else if (c[0].equals("n") && c.length == 4)
+            addProductToWarehouse(c[1], c[2], c[3]);
         else if (c[0].equals("a") && c.length == 3) {
             try {
                 long idx = Long.parseLong(c[1]);
@@ -158,4 +164,24 @@ public class ConsoleUI {
         }
     }
 
+    private void addProductToWarehouse(String name, String price, String amount) {
+        try {
+            long id = dao.findStockItems().stream().mapToLong(StockItem::getId).max().orElse(0) + 1;
+            StockItem stockItem = new StockItem(id, name, name, Double.parseDouble(price), Integer.parseInt(amount));
+            dao.saveStockItem(stockItem);
+            System.out.println("Item added to stock:");
+            System.out.println("-------------------------");
+            System.out.println(name + " " + price + "Euro (" + amount + " items)");
+            System.out.println("-------------------------");
+        } catch (NumberFormatException e) {
+            System.out.println("Could not add item: "+ e.getMessage());
+        }
+    }
+    private void removeProduct (String id) {
+        long barCode = Long.parseLong(id);
+        if (dao.findStockItem(barCode) != null) {
+            dao.findStockItems().remove(dao.findStockItem(barCode));
+            System.out.println("Item removed!");
+        } else System.out.println("Could not find an item with id " + id);
+    }
 }

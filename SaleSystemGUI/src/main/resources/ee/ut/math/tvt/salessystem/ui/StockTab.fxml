@@ -14,11 +14,13 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <SplitPane dividerPositions="0.4" orientation="VERTICAL" prefHeight="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
-        <AnchorPane prefHeight="200.0" styleClass="background_style" SplitPane.resizableWithParent="false">
+        <AnchorPane fx:id="upperSplitPane" prefHeight="200.0" styleClass="background_style" SplitPane.resizableWithParent="false">
           <TitledPane alignment="CENTER"  prefWidth="214.0" animated="false" collapsible="false" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
             <content>
               <GridPane prefWidth="214.0" styleClass="sub_background">
@@ -90,7 +92,11 @@
                   </TableView>
                 </center>
                 <top>
-                  <Button onMouseClicked="#refreshButtonClicked" text="Refresh warehouse" BorderPane.alignment="TOP_LEFT" />
+                  <HBox GridPane.columnIndex="1">
+                    <Button onMouseClicked="#refreshButtonClicked" text="Refresh warehouse" BorderPane.alignment="TOP_LEFT" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button fx:id="removeButton" onMouseClicked="#removeButtonClicked" text="Remove" BorderPane.alignment="TOP_RIGHT" HBox.hgrow="ALWAYS"/>
+                  </HBox>
                 </top>
               </BorderPane>
             </TitledPane>
