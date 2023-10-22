@@ -37,16 +37,24 @@ public class StockController implements Initializable {
     @FXML
     private AnchorPane upperSplitPane;
 
+
     public StockController(SalesSystemDAO dao) {
         this.dao = dao;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        refreshStockItems();
         removeButton.setVisible(false);
         removeButton.visibleProperty().bind(Bindings.isNotNull(warehouseTableView.getSelectionModel().selectedItemProperty()));
         addFocusListener(upperSplitPane);
-        refreshStockItems();
+
+        barCodeField.focusedProperty().addListener((observable, oldPropertyValue, newPropertyValue) -> {
+            if (!newPropertyValue) {
+                fillInputsBySelectedStockItem();
+            }
+        });
+
     }
     private void addFocusListener(Node node) {
         node.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -85,10 +93,12 @@ public class StockController implements Initializable {
         dao.saveStockItem(new StockItem(id, name, desc, price, quantity));
     }
 
-
     @FXML
     protected void addProductButtonClicked(){
-        addItemToStock();
+        StockItem stockItem = getStockItemByBarcode();
+        if (stockItem != null){
+            updateProduct();
+        } else addItemToStock();
         refreshStockItems();
         resetProductField();
     }
@@ -113,5 +123,30 @@ public class StockController implements Initializable {
 
     private boolean isBarcodeInUse(Long barcode) {
         return dao.findStockItems().stream().anyMatch(item -> item.getId().equals(barcode));
+    }
+    private void fillInputsBySelectedStockItem() {
+        StockItem stockItem = getStockItemByBarcode();
+        if (stockItem != null) {
+            barCodeField.setText(String.valueOf(stockItem.getId()));
+            priceField.setText(String.valueOf(stockItem.getPrice()));
+            nameField.setText(stockItem.getName());
+            quantityField.setText(String.valueOf(stockItem.getQuantity()));
+        }
+    }
+    private StockItem getStockItemByBarcode() {
+        try {
+            long code = Long.parseLong(barCodeField.getText());
+            return dao.findStockItem(code);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+    private void updateProduct(){
+        StockItem stockItem = getStockItemByBarcode();
+        if (stockItem != null){
+            stockItem.setName(nameField.getText());
+            stockItem.setPrice(Double.parseDouble(priceField.getText()));
+            stockItem.setQuantity(Integer.parseInt(quantityField.getText()));
+        }
     }
 }
