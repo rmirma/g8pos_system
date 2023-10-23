@@ -1,24 +1,17 @@
 .root{
-  b_color: #ba8e45;
+  b_color: #ca7623;
   b_color_f: #ba8e4559;
-  sb_color: #45ba8e;
-  sb_color_f: #45ba8e59;
+  sb_color: #ca7623;
+  sb_color_f: #257456;
   main_text_color: #000;
   control_color: #4571ba;
   selected_color: #b0ceff;
-  title_color: #4571ba80;
-  -text-color: #000;
+  title_color: #7e7e7e;
+  -text-color: #fff;
 }
 
 .background{
   -fx-background-color: b_color;
-}
-
-.sub_background{
-  -fx-background-color: linear-gradient(to bottom right, #ba8e4599, #45ba8e7f);
-}
-.teamInfo{
-  -fx-background-color: linear-gradient(to bottom right, #ba8e4599, #45ba8e7f);
 }
 
 .header{
@@ -89,18 +82,41 @@
  */
 
 .table-view {
-  -fx-base: red;
-  -fx-control-inner-background: control_color;
-  -fx-background-color: sb_color;
-  -fx-table-cell-border-color: sb_color;
+  -fx-base: transparent;
+  -fx-background-color: linear-gradient(
+          to bottom left,
+          b_color 20%,
+          sb_color_f 25%
+  ),
+  linear-gradient(to bottom left, b_color_f 50%, sb_color_f 55%),
+  linear-gradient(to bottom left, b_color_f 70%, sb_color_f 75%);
   -fx-table-header-border-color: transparent;
   -fx-padding: 0;
 }
 
-.table-row-cell .table-cell {
-  -fx-border-width: 0px;
+.warehouseTable{
+  -fx-base: transparent;
+  -fx-background-color: transparent;
+  -fx-table-header-border-color: transparent;
+  -fx-border-width: 1;
+  -fx-border-color: black;
 }
 
+.warehouseStatus{
+  -fx-background-color: linear-gradient(
+          to bottom left,
+          b_color 20%,
+          sb_color_f 25%
+  ),
+  linear-gradient(to bottom left, b_color_f 50%, sb_color_f 55%),
+  linear-gradient(to bottom left, b_color_f 70%, sb_color_f 75%);
+}
+
+.table-row-cell .table-cell {
+  -fx-border-width: 0px;
+  -fx-alignment: center;
+}
+/*
 .table-view .column-header-background {
   -fx-background-color: sb_color;
 }
@@ -109,34 +125,34 @@
   -fx-background-color: sb_color;
 }
 
+ */
+
 .table-row-cell:selected {
   -fx-background-color: control_color;
 }
 
 .table-view .column-header, .table-view .filler {
   -fx-size: 35;
-  -fx-border-width: 2 2 2 2;
+  -fx-border-width: 0 1 1 1;
   -fx-background-color: transparent;
-  -fx-border-color:
-          title_color
-          title_color
-          title_color
-          title_color;
-  -fx-border-insets: 1 1 1 1;
+  -fx-border-color: black;
 }
 
 .table-view .column-header .label {
   -fx-text-fill: main_text_color;
-  -fx-alignment: center-left;
+  -fx-alignment: center;
 }
 
 .table-view:focused .table-row-cell:filled:focused:selected {
   -fx-background-color: -fx-focus-color;
 }
 
+/*
 .table-view .placeholder {
-  -fx-background-color: sb_color;
+  -fx-background-color: #ff0;
 }
+
+ */
 
 .table-row-cell .text {
   -fx-fill: main_text_color ;
@@ -172,7 +188,6 @@
 }
 
 .tab-pane .tab-header-area .tab-header-background {
-  -fx-opacity: 1;
   -fx-background-color: title_color
 }
 
@@ -235,6 +250,14 @@
 .titled-pane:focused > .title
 {
   -fx-color: -fx-focus-color;
+}
+
+.titled-pane > *.content{
+  -fx-background-color: transparent ;
+}
+
+.sub_background{
+  -fx-background-color: transparent;
 }
 
 /*******************************************************************************

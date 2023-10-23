@@ -5,6 +5,7 @@ import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 import ee.ut.math.tvt.salessystem.logic.ShoppingCart;
+import ee.ut.math.tvt.salessystem.ui.SalesSystemUI;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -166,16 +167,16 @@ public class PurchaseController implements Initializable {
     public void addItemEventHandler() {
         // add chosen item to the shopping cart.
         StockItem stockItem = getStockItemByBarcode();
-        if (stockItem != null) {
-            int quantity;
-            try {
-                quantity = Integer.parseInt(quantityField.getText());
-            } catch (NumberFormatException e) {
-                quantity = 1;
-            }
-            shoppingCart.addItem(new SoldItem(stockItem, quantity));
-            purchaseTableView.refresh();
-        }
+        if (stockItem == null)
+            return;
+
+        int quantity;
+
+        try {quantity = Integer.parseInt(quantityField.getText());}
+        catch (NumberFormatException e) {quantity = 1;}
+
+        shoppingCart.addItem(new SoldItem(stockItem, quantity));
+        purchaseTableView.refresh();
     }
 
     /**
@@ -184,11 +185,11 @@ public class PurchaseController implements Initializable {
     @FXML
     public void selectItemEventHandler(){
         String productName = nameSelector.getValue().toString();
-        /*
-        StockItem stockItem = dao.findStockItem(productName);
-        barCodeField.setText(stockItem.getId());
-        priceField.setText(stockItem.getPrice());
-         */
+        List<StockItem> stockItem = dao.findStockItem(productName);
+        long id = stockItem.get(0).getId();
+        double price = stockItem.get(0).getPrice();
+        barCodeField.setText(Long.toString(id));
+        priceField.setText(Double.toString(price));
     }
 
     /**
@@ -206,7 +207,6 @@ public class PurchaseController implements Initializable {
     private void resetProductField() {
         barCodeField.setText("");
         quantityField.setText("1");
-        //nameSelector.setText("");
         priceField.setText("");
     }
 }

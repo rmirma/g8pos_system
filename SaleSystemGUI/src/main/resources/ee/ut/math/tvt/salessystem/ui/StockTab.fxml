@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
@@ -21,9 +22,9 @@
     <SplitPane dividerPositions="0.4" orientation="VERTICAL" prefHeight="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
         <AnchorPane fx:id="upperSplitPane" prefHeight="200.0" styleClass="background_style" SplitPane.resizableWithParent="false">
-          <TitledPane alignment="CENTER" animated="false" collapsible="false" prefWidth="214.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+          <TitledPane alignment="CENTER" animated="false" collapsible="false" prefWidth="214.0" text="Product" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
             <content>
-              <GridPane prefWidth="214.0" styleClass="sub_background">
+              <GridPane prefWidth="214.0">
                 <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="10000.0" minWidth="50.0" prefWidth="50.0" />
                   <ColumnConstraints />
@@ -55,9 +56,9 @@
         <AnchorPane>
           <children>
             <TitledPane alignment="CENTER" animated="false" collapsible="false" layoutY="-4.0" text="Warehouse status" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-              <BorderPane>
+              <BorderPane styleClass="warehouseStatus">
                 <center>
-                  <TableView fx:id="warehouseTableView" styleClass="blue_style">
+                  <TableView fx:id="warehouseTableView" styleClass="warehouseTable">
                     <columns>
                       <TableColumn text="Id">
                         <cellValueFactory>
@@ -90,6 +91,9 @@
                     <Button onMouseClicked="#refreshButtonClicked" text="Refresh warehouse" BorderPane.alignment="TOP_LEFT" />
                     <Region HBox.hgrow="ALWAYS" />
                     <Button fx:id="removeButton" onMouseClicked="#removeButtonClicked" text="Remove" BorderPane.alignment="TOP_RIGHT" HBox.hgrow="ALWAYS" />
+                              <BorderPane.margin>
+                                 <Insets bottom="5.0" />
+                              </BorderPane.margin>
                   </HBox>
                 </top>
               </BorderPane>

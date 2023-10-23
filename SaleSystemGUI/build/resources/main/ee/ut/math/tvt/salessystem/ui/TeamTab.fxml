@@ -12,19 +12,19 @@
     <children>
         <SplitPane dividerPositions="0.503140703517588" layoutX="-12.0" layoutY="1.0" orientation="VERTICAL" styleClass="background_style" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" styleClass="background_style" SplitPane.resizableWithParent="false">
+                <AnchorPane minHeight="0.0" minWidth="0.0" SplitPane.resizableWithParent="false">
                     <children>
                           <TitledPane alignment="CENTER" animated="false" collapsible="false" text="Team info" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <content>
                         <SplitPane dividerPositions="0.29797979797979796">
                           <items>
-                            <AnchorPane minHeight="0.0" minWidth="0.0">
+                            <AnchorPane minHeight="0.0" minWidth="0.0" SplitPane.resizableWithParent="false">
                                  <children>
-                                    <SplitPane dividerPositions="0.29797979797979796" styleClass="teamInfo" stylesheets="@DefaultTheme.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <SplitPane dividerPositions="0.5" styleClass="sub_background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <items>
-                                        <AnchorPane>
+                                        <AnchorPane styleClass="sub_background" SplitPane.resizableWithParent="false">
                                              <children>
-                                                <VBox spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                                                <VBox spacing="10.0" styleClass="sub_background" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                                                    <children>
                                                                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Team name:" wrappingWidth="91.0" />
                                                                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Team leader:" wrappingWidth="96.0" />
@@ -34,9 +34,9 @@
                                                 </VBox>
                                              </children>
                                           </AnchorPane>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0">
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" styleClass="sub_background" SplitPane.resizableWithParent="false">
                                              <children>
-                                                <VBox spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                                                <VBox spacing="10.0" styleClass="sub_background" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                                                    <children>
                                                       <Text fx:id="teamname" strokeType="OUTSIDE" strokeWidth="0.0" text="id=teamname" wrappingWidth="270.0" />
                                                       <Text fx:id="leader" strokeType="OUTSIDE" strokeWidth="0.0" text="id=leader" wrappingWidth="270.0" />

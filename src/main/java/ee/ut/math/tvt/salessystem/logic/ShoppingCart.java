@@ -2,9 +2,11 @@ package ee.ut.math.tvt.salessystem.logic;
 
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
+import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ShoppingCart {
 
@@ -19,8 +21,24 @@ public class ShoppingCart {
      * Add new SoldItem to table.
      */
     public void addItem(SoldItem item) {
-        //TODO In case such stockItem already exists increase the quantity of the existing stock
-        // verify that warehouse items' quantity remains at least zero or throw an exception
+        boolean found = false;
+        long id;
+        System.out.println(item);
+        for (SoldItem soldItem: items) {
+            id = item.getId();
+            if(!Objects.equals(soldItem.getId(), id))
+                continue;
+
+            StockItem stockItem = dao.findStockItem(id);
+            if(stockItem.getQuantity() == 0)
+                throw new RuntimeException("Can't add more items than are in stock.");
+
+            soldItem.setQuantity(soldItem.getQuantity()+1);
+            found = true;
+            break;
+        }
+        if(found)
+            return;
 
         items.add(item);
         //log.debug("Added " + item.getName() + " quantity of " + item.getQuantity());

@@ -1,5 +1,6 @@
 package ee.ut.math.tvt.salessystem.ui.controllers;
 
+import ee.ut.math.tvt.salessystem.ui.SalesSystemUI;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
@@ -15,6 +16,7 @@ import java.util.ResourceBundle;
 
 public class HistoryController implements Initializable {
     private final SalesSystemDAO dao;
+
 
 
     //constructor
