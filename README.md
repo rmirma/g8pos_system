@@ -11,7 +11,7 @@ https://bitbucket.org/ajutinenimi/lg8-javaenjoyers/wiki/hw1
 https://bitbucket.org/ajutinenimi/lg8-javaenjoyers/wiki/hw2
 
 ## Homework 3:
-<Links to the solution>
+https://bitbucket.org/ajutinenimi/lg8-javaenjoyers/commits/tag/homework-3
 
 ## Homework 4:
 <Links to the solution>
