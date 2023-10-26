@@ -57,7 +57,7 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
 
     @Override
     public void saveHistoryItem(HistoryItem item) {
-      historyList.add(item);
+      historyList.add(0,item);
     }
 
     @Override
