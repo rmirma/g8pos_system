@@ -18,6 +18,7 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
         items.add(new StockItem(2L, "Chupa-chups", "Sweets", 8.0, 8));
         items.add(new StockItem(3L, "Frankfurters", "Beer sauseges", 15.0, 12));
         items.add(new StockItem(4L, "Free Beer", "Student's delight", 0.0, 100));
+
         this.stockItemList = items;
         this.historyList = new ArrayList<>();
     }
@@ -46,8 +47,16 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
         return stockItems;
     }
 
+    /**
+     * Method returns The list of HistoryItems
+     * @return list of historyItems
+     */
+    public List<HistoryItem>getHistoryList(){
+        return historyList;
+    }
+
     @Override
-    public void saveSoldItem(HistoryItem item) {
+    public void saveHistoryItem(HistoryItem item) {
       historyList.add(item);
     }
 

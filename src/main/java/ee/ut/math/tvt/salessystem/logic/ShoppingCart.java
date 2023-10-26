@@ -1,9 +1,12 @@
 package ee.ut.math.tvt.salessystem.logic;
 
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
+import ee.ut.math.tvt.salessystem.dataobjects.HistoryItem;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -54,17 +57,29 @@ public class ShoppingCart {
 
     public void submitCurrentPurchase() {
         // TODO decrease quantities of the warehouse stock
-        //TODO change dao.saveSoldItem() so it would add a historyItem
-        // instead of SoldItem (check HistroyItem and DAO)
 
         // note the use of transactions. InMemorySalesSystemDAO ignores transactions
         // but when you start using hibernate in lab5, then it will become relevant.
         // what is a transaction? https://stackoverflow.com/q/974596
         dao.beginTransaction();
         try {
+
+            //totalPrice -> price of the shopping cart
+            Double totalPrice = 0.0;
             for (SoldItem item : items) {
-                //dao.saveSoldItem(item);   TODO change so it would take in new HistoryItem()
+                //TODO decrease stock items
+
+                //calculates the total price of the order,used in HistoryItem
+                totalPrice += item.getPrice()*item.getQuantity();
             }
+
+            //new history item is created
+            dao.saveHistoryItem(new HistoryItem(
+                    items,
+                    LocalDate.now(),
+                    LocalTime.now(),
+                    totalPrice));
+
             dao.commitTransaction();
             items.clear();
         } catch (Exception e) {

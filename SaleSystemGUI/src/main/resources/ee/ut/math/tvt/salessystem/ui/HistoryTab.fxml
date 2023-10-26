@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-
   <SplitPane dividerPositions="0.4" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
     <items>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="background_style" SplitPane.resizableWithParent="false">
@@ -22,9 +21,11 @@
                <children>
                   <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="5.0">
                      <children>
-                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Show all" />
+
+                        <Button onMouseClicked="#showAll" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Show all" />
                         <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Show last 10" />
                         <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Show between dates" />
+
                      </children>
                      <HBox.margin>
                         <Insets left="20.0" />
@@ -43,6 +44,7 @@
                </children>
             </HBox>
       </AnchorPane>
+        <!-- for shopping cart contents -->
       <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
             <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="300.0" prefWidth="412.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <items>
@@ -50,7 +52,8 @@
                      <children>
                     <TitledPane alignment="CENTER" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="History" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                       <content>
-                        <TableView fx:id="HistoryView" minWidth="-Infinity" prefHeight="130.0" prefWidth="598.0">
+
+                        <TableView onMouseClicked= "#showShoppingCartContents" fx:id="HistoryView" minWidth="-Infinity" prefHeight="130.0" prefWidth="598.0">
                           <columns>
                             <TableColumn text="Date">
                               <cellValueFactory>
@@ -72,6 +75,7 @@
                             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                           </columnResizePolicy>
                         </TableView>
+
                       </content>
                     </TitledPane>
                      </children>
@@ -80,6 +84,7 @@
                      <children>
                         <TitledPane alignment="CENTER" animated="false" collapsible="false" layoutY="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="179.0" prefWidth="598.0" text="Shopping Cart" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
                            <content>
+
                               <TableView fx:id="ShoppingCartView" AnchorPane.bottomAnchor="130.0">
                                  <columns>
                                     <TableColumn text="Id">
@@ -112,6 +117,7 @@
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                               </TableView>
+
                            </content>
                         </TitledPane>
                      </children>
