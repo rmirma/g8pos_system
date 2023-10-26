@@ -2,6 +2,7 @@ package ee.ut.math.tvt.salessystem.ui.controllers;
 
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
+import ee.ut.math.tvt.salessystem.ui.SalesSystemUI;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -12,11 +13,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class StockController implements Initializable {
+
+    private static final Logger log = LogManager.getLogger(SalesSystemUI.class);
 
     private final SalesSystemDAO dao;
 
@@ -74,6 +79,7 @@ public class StockController implements Initializable {
     public void refreshButtonClicked() {
         refreshStockItems();
         warehouseTableView.getSelectionModel().clearSelection();
+        log.info("Stock items refreshed");
     }
 
     private void refreshStockItems() {
@@ -91,6 +97,7 @@ public class StockController implements Initializable {
         double price = Double.parseDouble(priceField.getText());
         int quantity = Integer.parseInt(quantityField.getText());
         dao.saveStockItem(new StockItem(id, name, desc, price, quantity));
+        log.info("Product '"+name+ "' added to stock");
     }
 
     @FXML
@@ -108,6 +115,7 @@ public class StockController implements Initializable {
         if (selectedItem != null) {
             dao.findStockItems().remove(selectedItem);
             refreshStockItems();
+            log.info("product '"+selectedItem.getName()+ "' removed");
         }
     }
     private void resetProductField() {
@@ -147,6 +155,7 @@ public class StockController implements Initializable {
             stockItem.setName(nameField.getText());
             stockItem.setPrice(Double.parseDouble(priceField.getText()));
             stockItem.setQuantity(Integer.parseInt(quantityField.getText()));
+            log.info("product '"+stockItem.getName()+ "' updated");
         }
     }
 }
