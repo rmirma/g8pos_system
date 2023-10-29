@@ -38,6 +38,10 @@
   linear-gradient(to bottom right, b_color_f 70%, sb_color_f 75%);
 }
 
+.priceLabel{
+  -fx-background-color:  #7e7e7e;
+}
+
 .background_fills{
   -fx-background-color: #000000, #111111, #000000, #111111;
 }

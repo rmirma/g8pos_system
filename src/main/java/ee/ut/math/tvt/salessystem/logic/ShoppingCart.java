@@ -7,6 +7,8 @@ import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ShoppingCart {
 
@@ -21,31 +23,30 @@ public class ShoppingCart {
      * Add new SoldItem to table.
      */
     public void addItem(SoldItem item) {
-        boolean found = false;
-        long id;
-        System.out.println(item);
-        for (SoldItem soldItem: items) {
-            id = item.getId();
-            if(!Objects.equals(soldItem.getId(), id))
-                continue;
-
-            StockItem stockItem = dao.findStockItem(id);
-            if(stockItem.getQuantity() == 0)
-                throw new RuntimeException("Can't add more items than are in stock.");
-
-            soldItem.setQuantity(soldItem.getQuantity()+1);
-            found = true;
-            break;
-        }
-        if(found)
-            return;
-
         items.add(item);
-        //log.debug("Added " + item.getName() + " quantity of " + item.getQuantity());
+    }
+
+    /**
+     * Remove a SoldItem from the table
+     */
+    public void removeItem(SoldItem item){
+        items.remove(item);
+    }
+
+    /**
+     * Increases amount of existing SoldItem in table
+     */
+    public void increaseItemQuantity(SoldItem item){
+        SoldItem existingItem = items.stream().filter(soldItem -> soldItem.getId().equals(item.getId())).toList().get(0);
+        existingItem.setQuantity(existingItem.getQuantity()+item.getQuantity());
     }
 
     public List<SoldItem> getAll() {
         return items;
+    }
+
+    public boolean contains(SoldItem item){
+        return items.stream().anyMatch(soldItem -> soldItem.getId().equals(item.getId()));
     }
 
     public void cancelCurrentPurchase() {
