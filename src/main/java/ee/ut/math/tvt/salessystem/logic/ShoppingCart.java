@@ -79,7 +79,7 @@ public class ShoppingCart {
                     LocalDate.now(),
                     LocalTime.now(),
                     totalPrice));
-
+            //log.info("new HistoryItem was created, time of creation: " + LocalDate.now() + " " + LocalTime.now())
             dao.commitTransaction();
             items.clear();
         } catch (Exception e) {
