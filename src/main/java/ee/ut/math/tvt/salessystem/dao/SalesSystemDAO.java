@@ -35,7 +35,7 @@ public interface SalesSystemDAO {
 
     List<StockItem> findStockItem(String name);
 
-    void saveSoldItem(HistoryItem item);
+    void saveHistoryItem(HistoryItem item);
 
     void saveStockItem(StockItem stockItem);
 
@@ -46,4 +46,7 @@ public interface SalesSystemDAO {
     void rollbackTransaction();
 
     void commitTransaction();
+
+    List<HistoryItem> getHistoryList();
+
 }

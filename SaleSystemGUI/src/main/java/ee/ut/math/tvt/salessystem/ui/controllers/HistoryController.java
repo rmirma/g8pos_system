@@ -1,38 +1,163 @@
 package ee.ut.math.tvt.salessystem.ui.controllers;
 
-import ee.ut.math.tvt.salessystem.ui.SalesSystemUI;
+import ee.ut.math.tvt.salessystem.dataobjects.HistoryItem;
+import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableView;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.time.LocalDate;
+import java.util.*;
 
 /**
- * Encapsulates everything that has to do with the history tab (the tab
- * labelled "History" in the menu).
+ * Encapsulates everything that has to do with the history tabs controls (the tab
+ * labelled "History" in the GUI menu).
  *
  */
 
 
 public class HistoryController implements Initializable {
+    private static final Logger log = LogManager.getLogger(PurchaseController.class);
     private final SalesSystemDAO dao;
 
+    @FXML
+    private DatePicker startDate;
+
+    @FXML
+    private DatePicker endDate;
+
+    @FXML
+    private TableView<HistoryItem> HistoryView;
+
+    @FXML
+    private TableView<SoldItem> ShoppingCartView;
 
 
-    //constructor
+
+    //for showing last viewd HistoryItem's shopping cart contents
+    private List<HistoryItem> itemsBetweenDates = new ArrayList<>();
+
+
+    /**
+     * Creates new instance of a HistoryController. Must be tied to HistoryTab.fxml
+     * @param dao > built in temporary database
+     */
     public HistoryController(SalesSystemDAO dao) {
         this.dao = dao;
+
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // TODO: implement
+        showAll();
     }
 
 
+    /**
+     * Returns The last viewd HistoryItems shown between dates. If last
+     * try to view HistoryItems between dates logged an error /threw error,
+     * Then the return value will be empty ArrayList< HistoryItem >.
+     */
+    public List<HistoryItem> getItemsBetweenDates(){
+        return itemsBetweenDates;
+    }
+
+
+    /////////////////////////////////FXML/GUI methods////////////////////////////////////////////////
+
+
+    /**
+     * Shows all the purchase history (HistoryItems) in the HistoryView section
+     * of HistoryTab.fxml.
+     */
+    @FXML
+    public void showAll(){
+        HistoryView.setItems(FXCollections.observableList(dao.getHistoryList()));
+        HistoryView.refresh();
+        log.info("Shows All purchases in History tab");
+    }
+
+
+    /**
+     * Shows last 10 purchases made (HistoryItems) in HistoryView section
+     * of HistoryTab.fxml
+     */
+    @FXML
+    public void showLast10(){
+        if (dao.getHistoryList().size() < 10){
+            HistoryView.setItems(FXCollections.observableList(dao.getHistoryList()));
+            HistoryView.refresh();
+            log.info("Last 10 purchases shown in History tab");
+        }else{
+            HistoryView.setItems(FXCollections.observableList(dao.getHistoryList().subList(0,10)));
+            HistoryView.refresh();
+            log.info("Last 10 purchases shown in History tab");
+        }
+    }
+
+
+    /**
+     * Shows all the purchases (HistoryItems) made between the dates (both inclusive).
+     * Method takes start and end date from HistoryTab.fxml button values "startDate"
+     * and "endDate". If any field is empty or start date is before end date, throws
+     * error and logs error.
+     */
+    @FXML
+    public void showBetweenDates(){
+        //TODO fix error handling
+        itemsBetweenDates.clear();
+        try{
+            LocalDate start = startDate.getValue();
+            LocalDate end = endDate.getValue();
+            if (start != null &&
+                    end != null &&
+                        start.isBefore(end.plusDays(1)) &&   // +1 to be inclusive
+                            start.isBefore(LocalDate.now().plusDays(1))){
+                for (HistoryItem item : dao.getHistoryList()) {
+                    if (item.getDate().isAfter(start.minusDays(1)) && // +1 to be inclusive
+                        item.getDate().isBefore(end.plusDays(1))){
+                        itemsBetweenDates.add(item);
+                    }
+                }
+                HistoryView.setItems(FXCollections.observableList(itemsBetweenDates));
+                HistoryView.refresh();
+                log.info("History shown between " + start + " - " + end);
+            }else{
+                //TODO throw error (message??)
+                log.error("Error in loading showBetweenDates method in HistoryController.java");
+            }
+        }catch (Exception e) {
+            //throw new SalesSystemException("error in loading items between dates, see showBetweenDates()");
+            log.error("Error in loading showBetweenDates method in HistoryController.java");
+        }
+    }
+
+
+    /**
+     * Shows selected purchase (HistoryItems) shopping cart/purchase contents
+     * in ShoppingCartView in HistoryTab.fxml.Gets HistoryItem from
+     * HistroyView.getSelectionModel(). If error occurs throws error/logs error
+     */
     @FXML
     public void showShoppingCartContents(){
+        //TODO fix the method, does not show contents of historyItem
+        try{
+            List<SoldItem> shoppingCart = HistoryView.getSelectionModel().getSelectedItem().getContents();
+            //TODO Logger shows it gets the item but for some reason it does not display it on GUI
+            ShoppingCartView.setItems(FXCollections.observableList(shoppingCart));
+            log.info("contents of purchase " + HistoryView.getSelectionModel().getSelectedItem().getDate() +
+                    " " + HistoryView.getSelectionModel().getSelectedItem().getTime() + " shown");
+            ShoppingCartView.refresh();
+        }catch (Exception e){
+            //throw new SalesSystemException("error with loading contenst from selected purchase");
+            log.error("error loading shoppingCartContents, reffer to showShoppingCartContents() in HistoryController");
+            }
+        }
+    }//HistoryController
 
-    }
-
-}

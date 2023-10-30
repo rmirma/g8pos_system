@@ -5,18 +5,21 @@
 
 package ee.ut.math.tvt.salessystem.dataobjects;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public class HistoryItem {
 
     private final List<SoldItem> contents; //contens of the purchse
-    private final Date date;  //date of the transaction
+    private final LocalDate date;  //date of the transaction
+    private final LocalTime time;  //time of the transaction
     private final Double total; //total price of the shopping cart
 
-    public HistoryItem(List<SoldItem> contents, Date date, Double total) {
+    public HistoryItem(List<SoldItem> contents, LocalDate date, LocalTime time, Double total) {
         this.contents = contents;
         this.date = date;
+        this.time = time;
         this.total = total;
     }
 
@@ -26,11 +29,13 @@ public class HistoryItem {
         return contents;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
     public Double getTotal() {
         return total;
     }
+
+    public LocalTime getTime(){return time;}
 }
