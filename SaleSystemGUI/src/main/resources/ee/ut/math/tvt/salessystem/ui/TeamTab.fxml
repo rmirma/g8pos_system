@@ -52,11 +52,7 @@
                               </AnchorPane>
                             <AnchorPane maxHeight="-Infinity" maxWidth="223.0" minHeight="0.0" minWidth="0.0" SplitPane.resizableWithParent="false">
                                  <children>
-                                                <ImageView fx:id="teamlogo" fitWidth="223.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                       <image>
-                                          <Image url="@../../../../../../../../../../src/main/resources/logo.jpeg" />
-                                       </image>
-                                    </ImageView>
+                                     <ImageView fx:id="teamlogo" fitWidth="233.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                           </items>

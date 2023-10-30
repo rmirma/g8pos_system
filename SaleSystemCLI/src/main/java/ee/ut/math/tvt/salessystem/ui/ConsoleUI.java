@@ -9,10 +9,7 @@ import ee.ut.math.tvt.salessystem.logic.ShoppingCart;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Properties;
@@ -135,10 +132,10 @@ public class ConsoleUI {
         System.out.println("===========================");
         System.out.println("=        Team info        =");
         System.out.println("===========================");
-        String filePath = "C:\\Users\\rasmusmi\\Desktop\\UT\\3.semester\\SE\\JavaEnjoyers\\lg8-javaenjoyers\\src\\main\\resources\\application.properties";
+        String filePath = "application.properties";
 
         Properties pros = new Properties();
-        try (FileInputStream ip = new FileInputStream(filePath)) {
+        try (InputStream ip = getClass().getClassLoader().getResourceAsStream(filePath)) {
             pros.load(ip);
             System.out.println("TEAM NAME: " + pros.get("teamName"));
             System.out.println("TEAM LEADER: " + pros.get("teamLeader"));

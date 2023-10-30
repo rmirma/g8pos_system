@@ -33,6 +33,9 @@ public class TeamController implements Initializable{
     private String teamMember2;
     private String teamMember3;
     private String teamMember4;
+    private String teamLogo;
+    @FXML
+    private ImageView teamlogo;
     private static final Logger log = LogManager.getLogger(TeamController.class);
 
     public TeamController() throws IOException {
@@ -52,6 +55,7 @@ public class TeamController implements Initializable{
             teamMember4 = pros.getProperty("teamMember4");
             teamLeader = pros.getProperty("teamLeader");
             teamLeaderEmail = pros.getProperty("teamLeaderEmail");
+            teamLogo = pros.getProperty("teamLogo");
             ip.close();
         } catch (Exception e){
             log.error(e.getMessage(), e);
@@ -72,6 +76,7 @@ public class TeamController implements Initializable{
         teammembers.setText(teamMember1 + "\n" + teamMember2 + "\n" + teamMember3 + "\n" + teamMember4);
         leader.setText(teamLeader);
         leaderemail.setText(teamLeaderEmail);
+        teamlogo.setImage(new Image(teamLogo));
     }
 
 }
