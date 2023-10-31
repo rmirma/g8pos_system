@@ -1,6 +1,7 @@
 package ee.ut.math.tvt.salessystem.dao;
 
 import ee.ut.math.tvt.salessystem.dataobjects.HistoryItem;
+import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
         List<StockItem> items = new ArrayList<StockItem>();
         items.add(new StockItem(1L, "Lays chips", "Potato chips", 11.0, 5));
         items.add(new StockItem(2L, "Chupa-chups", "Sweets", 8.0, 8));
-        items.add(new StockItem(3L, "Frankfurters", "Beer sauseges", 15.0, 12));
+        items.add(new StockItem(3L, "Frankfurters", "Beer sausages", 15.0, 12));
         items.add(new StockItem(4L, "Free Beer", "Student's delight", 0.0, 100));
 
         this.stockItemList = items;
@@ -26,6 +27,15 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
     @Override
     public List<StockItem> findStockItems() {
         return stockItemList;
+    }
+
+
+    @Override
+    public void decreaseItemQuantites(List<SoldItem> items){
+        for (SoldItem item : items) {
+            StockItem itemToDecrease = findStockItem(item.getId());
+            itemToDecrease.setQuantity(itemToDecrease.getQuantity()-item.getQuantity());
+        }
     }
 
     @Override

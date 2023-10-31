@@ -54,7 +54,6 @@ public class PurchaseController implements Initializable {
     private Button removeItemButton;
     @FXML
     private TableView<SoldItem> purchaseTableView;
-    private List<StockItem> items;
     public PurchaseController(SalesSystemDAO dao, ShoppingCart shoppingCart) {
         this.dao = dao;
         this.shoppingCart = shoppingCart;
@@ -103,7 +102,6 @@ public class PurchaseController implements Initializable {
         try {
             purchaseTableView.getItems().clear();
             shoppingCart.cancelCurrentPurchase();
-            purchaseTableView.getItems().clear();
             disableInputs();
         } catch (SalesSystemException e) {
             log.error(e.getMessage(), e);
@@ -119,6 +117,7 @@ public class PurchaseController implements Initializable {
         try {
             log.debug("Contents of the current basket:\n" + shoppingCart.getAll());
             purchaseTableView.getItems().clear();
+            dao.decreaseItemQuantites(shoppingCart.getAll());
             shoppingCart.submitCurrentPurchase();
             disableInputs();
         } catch (SalesSystemException e) {
