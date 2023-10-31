@@ -39,6 +39,7 @@ public class ConsoleUI {
      * Run the sales system CLI.
      */
     public void run() throws IOException {
+        log.info("Sales system CLI started.");
         System.out.println("===========================");
         System.out.println("=       Sales System      =");
         System.out.println("===========================");
@@ -52,6 +53,7 @@ public class ConsoleUI {
     }
 
     private void showStock() {
+        log.info("Showing stock");
         List<StockItem> stockItems = dao.findStockItems();
         System.out.println("-------------------------");
         for (StockItem si : stockItems) {
@@ -64,6 +66,7 @@ public class ConsoleUI {
     }
 
     private void showCart() {
+        log.info("Showing cart");
         System.out.println("-------------------------");
         for (SoldItem si : cart.getAll()) {
             System.out.println(si.getName() + " " + si.getPrice() + "Euro (" + si.getQuantity() + " items)");
@@ -129,6 +132,7 @@ public class ConsoleUI {
     }
 
     private void showTeam() {
+        log.info("Showing team info");
         System.out.println("===========================");
         System.out.println("=        Team info        =");
         System.out.println("===========================");
@@ -145,6 +149,7 @@ public class ConsoleUI {
             System.out.println(pros.get("teamMember3"));
             System.out.println(pros.get("teamMember4"));
             System.out.println("----------------------------------");
+            log.debug("Team info successfully loaded");
             Scanner sc = new Scanner(System.in);
             System.out.println("Would you like to continue? (y/n)");
             String input = sc.nextLine();
@@ -171,6 +176,7 @@ public class ConsoleUI {
             System.out.println(name + " " + price + "Euro (" + amount + " items)");
             System.out.println("-------------------------");
         } catch (NumberFormatException e) {
+            log.error(e.getMessage());
             System.out.println("Could not add item: "+ e.getMessage());
         }
     }

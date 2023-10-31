@@ -57,6 +57,7 @@ public class TeamController implements Initializable{
             teamLeaderEmail = pros.getProperty("teamLeaderEmail");
             teamLogo = pros.getProperty("teamLogo");
             ip.close();
+            log.debug("Team info successfully loaded");
         } catch (Exception e){
             log.error(e.getMessage(), e);
             Alert alert = new Alert(Alert.AlertType.ERROR);
