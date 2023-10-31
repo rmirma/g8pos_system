@@ -4,19 +4,20 @@ import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class HistoryTabTest{
 
 
     private InMemorySalesSystemDAO dao = new InMemorySalesSystemDAO();
     private List<HistoryItem> testItems;
+    private List<HistoryItem> historyItemList = dao.getHistoryList();
 
 
     /**
@@ -58,6 +59,7 @@ public class HistoryTabTest{
         dao.saveHistoryItem(newHistory2);
         dao.saveHistoryItem(newHistory3);
         dao.saveHistoryItem(newHistory4);
+        dao.saveHistoryItem(newHistory5);
         dao.saveHistoryItem(newHistory6);
         dao.saveHistoryItem(newHistory7);
         dao.saveHistoryItem(newHistory8);
@@ -66,6 +68,8 @@ public class HistoryTabTest{
         dao.saveHistoryItem(newHistory11);
 
         testItems = Arrays.asList(newHistory1,newHistory2,newHistory3,newHistory4,newHistory5,newHistory6,newHistory7,newHistory8,newHistory9,newHistory10,newHistory11);
+        historyItemList.sort(Comparator.comparing(HistoryItem::getTime));
+        testItems.sort(Comparator.comparing(HistoryItem::getTime));
         //TODO add FXMLoader to test the date method.
 
     }
@@ -75,18 +79,18 @@ public class HistoryTabTest{
     public void testShowAll(){
         assertNotNull(dao.getHistoryList());
         assertNotNull(testItems);
-        assertEquals(dao.getHistoryList(),testItems);
+        assertEquals(historyItemList,testItems);
     }
 
     @Test
     public void testShowLast10(){
-        assertNotNull(dao.getHistoryList());
+        assertNotNull(historyItemList);
         assertNotNull(testItems);
 
         if (testItems.size()>10){
-            assertEquals(dao.getHistoryList().subList(0,10),testItems.subList(0,10));
+            assertEquals(historyItemList.subList(0,10),testItems.subList(0,10));
         }else {
-            assertEquals(dao.getHistoryList(),testItems);
+            assertEquals(historyItemList,testItems);
         }
     }
 

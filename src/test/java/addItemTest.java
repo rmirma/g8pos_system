@@ -1,64 +1,72 @@
 import ee.ut.math.tvt.salessystem.dao.InMemorySalesSystemDAO;
-import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
-import ee.ut.math.tvt.salessystem.logic.ShoppingCart;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+
 
 public class addItemTest {
     private void assertEqual(Class<? extends StockItem> aClass, Class<? extends StockItem> aClass1) {
     }
 
     private InMemorySalesSystemDAO dao;
-    private ShoppingCart cart;
+    StockItem stockItem;
 
     @Before
     public void setUp() {
         dao = new InMemorySalesSystemDAO();
-        cart = new ShoppingCart(dao);
+        stockItem = new StockItem(5L, "Test", "Test", 10.0, 50);
+    }
+    @Test
+    public void testAddingItemBeginsAndCommitsTransaction(){
+        // TODO:
+        //  check that methods beginTransaction and commitTransaction
+        //  are both called exactly once and that order
     }
     @Test
     public void testAddingNewItem() {
-        StockItem newItem = new StockItem(5L, "Potato", "Potato", 1.0, 50);
-
-        dao.saveStockItem(newItem);
+        dao.saveStockItem(stockItem);
 
         StockItem addedItem = dao.findStockItem(5L);
 
         assertNotNull(addedItem);
-        assertEqual(newItem.getClass(), addedItem.getClass());
-        assertEquals(newItem.getId(), addedItem.getId());
-        assertEquals(newItem.getName(), addedItem.getName());
-        assertEquals(newItem.getPrice(), addedItem.getPrice(), 0.001);
-        assertEquals(newItem.getQuantity(), addedItem.getQuantity());
+        assertEqual(stockItem.getClass(), addedItem.getClass());
+        assertEquals(stockItem.getId(), addedItem.getId());
+        assertEquals(stockItem.getName(), addedItem.getName());
+        assertEquals(stockItem.getPrice(), addedItem.getPrice(), 0.001);
+        assertEquals(stockItem.getQuantity(), addedItem.getQuantity());
     }
 
     @Test
     public void testAddingExistingItem() {
-        StockItem newItem = new StockItem(6L, "Test", "Test", 10.0, 50);
+        //TODO: make it make sense
 
-        dao.saveStockItem(newItem);
+        dao.saveStockItem(stockItem);
 
-        newItem.setName("Water");
-        newItem.setPrice(20);
-        newItem.setQuantity(100);
+        stockItem.setName("Water");
+        stockItem.setPrice(20);
+        stockItem.setQuantity(100);
 
-        StockItem updatedItem = dao.findStockItem(6L);
+        StockItem updatedItem = dao.findStockItem(5L);
 
         assertNotNull(updatedItem);
         assertEquals("Water", updatedItem.getName());
         assertEquals(20, updatedItem.getPrice(), 0.001);
         assertEquals(100, updatedItem.getQuantity());
     }
-
     @Test
-    public void testAddingItemWithNegativeQuantity() {
-        StockItem stockItem = new StockItem((long) 12, "Onion", "Onion", 10.0, 12);
-        SoldItem soldItem = new SoldItem(stockItem, -1);
-        cart.addItem(soldItem);
+    public void testAddingItemWithNegativeQuantity(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            StockItem newItem = new StockItem(6L, "Test", "Test", 10.0, -1);
+            dao.saveStockItem(newItem);
+        });
     }
-
-
+    @Test
+    public void testAddingItemWithNegativePrice(){
+        assertThrows(IllegalArgumentException.class, () -> {
+            StockItem newItem = new StockItem(6L, "Test", "Test", -1, 50);
+            dao.saveStockItem(newItem);
+        });
+    }
 }

@@ -18,6 +18,7 @@ public class StockItem {
         this.id = id;
         this.name = name;
         this.description = desc;
+        if (price < 0 || quantity < 0) throw new IllegalArgumentException("Price and quantity must be non-negative");
         this.price = price;
         this.quantity = quantity;
     }
@@ -43,6 +44,7 @@ public class StockItem {
     }
 
     public void setPrice(double price) {
+        if (price < 0 ) throw new IllegalArgumentException("Price must be non-negative");
         this.price = price;
     }
 
@@ -59,6 +61,7 @@ public class StockItem {
     }
 
     public void setQuantity(int quantity) {
+        if (quantity < 0 ) throw new IllegalArgumentException("Quantity must be non-negative");
         this.quantity = quantity;
     }
 
