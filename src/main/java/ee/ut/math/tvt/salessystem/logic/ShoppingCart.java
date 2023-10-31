@@ -12,11 +12,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ShoppingCart {
 
     private final SalesSystemDAO dao;
     private final List<SoldItem> items = new ArrayList<>();
+    private static final Logger log = LogManager.getLogger(ShoppingCart.class);
+
 
     public ShoppingCart(SalesSystemDAO dao) {
         this.dao = dao;
@@ -80,7 +84,7 @@ public class ShoppingCart {
                     LocalDate.now(),
                     LocalTime.now(),
                     totalPrice));
-            //log.info("new HistoryItem was created, time of creation: " + LocalDate.now() + " " + LocalTime.now())
+            log.info("new HistoryItem was created, time of creation: " + LocalDate.now() + " " + LocalTime.now());
             dao.commitTransaction();
             items.clear();
         } catch (Exception e) {
