@@ -8,11 +8,14 @@ import ee.ut.math.tvt.salessystem.ui.controllers.StockController;
 import ee.ut.math.tvt.salessystem.logic.ShoppingCart;
 import ee.ut.math.tvt.salessystem.ui.controllers.TeamController;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.DialogEvent;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
@@ -30,6 +33,7 @@ import java.net.URL;
  * Graphical user interface of the sales system.
  */
 public class SalesSystemUI extends Application {
+    public static Alert alert = new Alert(Alert.AlertType.ERROR,"");
 
     private static final Logger log = LogManager.getLogger(SalesSystemUI.class);
 
@@ -39,6 +43,12 @@ public class SalesSystemUI extends Application {
     public SalesSystemUI() {
         dao = new InMemorySalesSystemDAO();
         shoppingCart = new ShoppingCart(dao);
+        alert.setResizable(false);
+        alert.setTitle("Imput Error");    //can be changed on callout
+        alert.setOnCloseRequest(event -> {
+            alert.setContentText("placeholder for new content");
+            System.out.println(alert.getContentText());  //for testing
+        });
     }
 
     @Override
@@ -97,6 +107,7 @@ public class SalesSystemUI extends Application {
         fxmlLoader.setController(controller);
         return fxmlLoader.load();
     }
+
 }
 
 

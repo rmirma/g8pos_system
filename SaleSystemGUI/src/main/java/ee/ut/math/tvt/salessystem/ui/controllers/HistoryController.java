@@ -2,10 +2,12 @@ package ee.ut.math.tvt.salessystem.ui.controllers;
 
 import ee.ut.math.tvt.salessystem.dataobjects.HistoryItem;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
+import ee.ut.math.tvt.salessystem.ui.SalesSystemUI;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
+import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -176,6 +178,9 @@ public class HistoryController implements Initializable {
         }catch (Exception e){
             //throw new SalesSystemException("error with loading contenst from selected purchase");
             log.error("error loading shoppingCartContents, reffer to showShoppingCartContents() in HistoryController");
+            SalesSystemUI.alert.setContentText("Error loading shopping cart contents, please ");
+            SalesSystemUI.alert.show();
+
             }
         }
     }//HistoryController
