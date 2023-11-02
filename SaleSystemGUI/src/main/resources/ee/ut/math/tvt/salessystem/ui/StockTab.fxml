@@ -48,6 +48,7 @@
                   <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <TextField fx:id="priceField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <Label text="Amount:" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                  <Button fx:id="removeButton" layoutX="238.0" layoutY="82.0" onAction="#removeButtonClicked" text="Remove" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.rowSpan="3" />
                 </children>
               </GridPane>
             </content>
@@ -90,7 +91,6 @@
                   <HBox GridPane.columnIndex="1">
                     <Button onMouseClicked="#refreshButtonClicked" text="Refresh warehouse" BorderPane.alignment="TOP_LEFT" />
                     <Region HBox.hgrow="ALWAYS" />
-                    <Button fx:id="removeButton" onMouseClicked="#removeButtonClicked" text="Remove" BorderPane.alignment="TOP_RIGHT" HBox.hgrow="ALWAYS" />
                               <BorderPane.margin>
                                  <Insets bottom="5.0" />
                               </BorderPane.margin>

@@ -2,8 +2,9 @@ package ee.ut.math.tvt.salessystem.ui.controllers;
 
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
-import ee.ut.math.tvt.salessystem.ui.SalesSystemUI;
+import ee.ut.math.tvt.salessystem.logic.Warehouse;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,15 +16,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class StockController implements Initializable {
 
-    private static final Logger log = LogManager.getLogger(SalesSystemUI.class);
+    private static final Logger log = LogManager.getLogger(StockController.class);
 
     private final SalesSystemDAO dao;
+    private final Warehouse warehouse;
 
     @FXML
     private Button addItem;
@@ -43,15 +46,17 @@ public class StockController implements Initializable {
     private AnchorPane upperSplitPane;
 
 
-    public StockController(SalesSystemDAO dao) {
+    public StockController(SalesSystemDAO dao, Warehouse warehouse) {
         this.dao = dao;
+        this.warehouse = warehouse;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         refreshStockItems();
-        removeButton.setVisible(false);
-        removeButton.visibleProperty().bind(Bindings.isNotNull(warehouseTableView.getSelectionModel().selectedItemProperty()));
+        removeButton.setDisable(true);
+        BooleanBinding disableRemoveButton = Bindings.isNull(warehouseTableView.getSelectionModel().selectedItemProperty());
+        removeButton.disableProperty().bind(disableRemoveButton);
         addFocusListener(upperSplitPane);
 
         barCodeField.focusedProperty().addListener((observable, oldPropertyValue, newPropertyValue) -> {
@@ -86,63 +91,43 @@ public class StockController implements Initializable {
         warehouseTableView.setItems(FXCollections.observableList(dao.findStockItems()));
         warehouseTableView.refresh();
     }
-    public void addItemToStock () {
-        dao.beginTransaction();
-        try {
-            Long id;
-            if ((Objects.equals(barCodeField.getText(), "")) || isBarcodeInUse(Long.parseLong(barCodeField.getText()))) {
-                id = generateUniqueId();
-            } else id = Long.parseLong(barCodeField.getText());
 
+    @FXML
+    protected void addProductButtonClicked() {
+        try {
             String name = nameField.getText();
             String desc = nameField.getText();
             double price = Double.parseDouble(priceField.getText());
             int quantity = Integer.parseInt(quantityField.getText());
-
-            dao.saveStockItem(new StockItem(id, name, desc, price, quantity));
-            log.info("Product '" + name + "' added to stock");
-            dao.commitTransaction();
-        } catch (Exception e) {
-            dao.rollbackTransaction();
-            throw new RuntimeException(e);
-
+            long id;
+            if (Objects.equals(String.valueOf(barCodeField.getText()), "")) {
+                id = generateUniqueId();
+            } else id = Long.parseLong(barCodeField.getText());
+            warehouse.addItem(id, name, desc, price, quantity);
+            refreshStockItems();
+            resetProductField();
+        } catch (NumberFormatException e) {
+            log.error("Failed to add product: " + e.getMessage());
         }
     }
 
     @FXML
-    protected void addProductButtonClicked(){
-        StockItem stockItem = getStockItemByBarcode();
-        if (stockItem != null){
-            updateProduct();
-        } else addItemToStock();
-        refreshStockItems();
-        resetProductField();
-    }
-    @FXML
     private void removeButtonClicked() {
-        dao.beginTransaction();
         StockItem selectedItem = warehouseTableView.getSelectionModel().getSelectedItem();
-        if (selectedItem != null) {
-            dao.findStockItems().remove(selectedItem);
-            refreshStockItems();
-            log.info("product '"+selectedItem.getName()+ "' removed");
-            dao.commitTransaction();
-        }else dao.rollbackTransaction();
+        warehouse.removeItem(selectedItem.getId());
+        refreshStockItems();
     }
+
     private void resetProductField() {
         barCodeField.setText("");
         quantityField.setText("");
         nameField.setText("");
         priceField.setText("");
     }
-
     private long generateUniqueId() {
         return dao.findStockItems().stream().mapToLong(StockItem::getId).max().orElse(0) + 1;
     }
 
-    private boolean isBarcodeInUse(Long barcode) {
-        return dao.findStockItems().stream().anyMatch(item -> item.getId().equals(barcode));
-    }
     private void fillInputsBySelectedStockItem() {
         StockItem stockItem = getStockItemByBarcode();
         if (stockItem != null) {
@@ -159,16 +144,5 @@ public class StockController implements Initializable {
         } catch (NumberFormatException e) {
             return null;
         }
-    }
-    private void updateProduct(){
-        dao.beginTransaction();
-        StockItem stockItem = getStockItemByBarcode();
-        if (stockItem != null){
-            stockItem.setName(nameField.getText());
-            stockItem.setPrice(Double.parseDouble(priceField.getText()));
-            stockItem.setQuantity(Integer.parseInt(quantityField.getText()));
-            log.info("product '"+stockItem.getName()+ "' updated");
-            dao.commitTransaction();
-        }else dao.rollbackTransaction();
     }
 }
