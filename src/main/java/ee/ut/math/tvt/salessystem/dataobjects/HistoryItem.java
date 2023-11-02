@@ -11,7 +11,7 @@ import java.util.List;
 
 public class HistoryItem {
 
-    private final List<SoldItem> contents; //contens of the purchse
+    public List<SoldItem> contents; //contens of the purchse
     private final LocalDate date;  //date of the transaction
     private final LocalTime time;  //time of the transaction
     private final Double total; //total price of the shopping cart

@@ -7,10 +7,7 @@ import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -80,7 +77,7 @@ public class ShoppingCart {
 
             //new history item is created
             dao.saveHistoryItem(new HistoryItem(
-                    items,
+                    new ArrayList<>(items),
                     LocalDate.now(),
                     LocalTime.now(),
                     totalPrice));
