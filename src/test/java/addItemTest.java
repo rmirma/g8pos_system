@@ -1,5 +1,7 @@
 import ee.ut.math.tvt.salessystem.dao.InMemorySalesSystemDAO;
+import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
+import ee.ut.math.tvt.salessystem.logic.ShoppingCart;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,13 +12,23 @@ public class addItemTest {
     private void assertEqual(Class<? extends StockItem> aClass, Class<? extends StockItem> aClass1) {
     }
 
+    private ShoppingCart shoppingCart;
     private InMemorySalesSystemDAO dao;
     StockItem stockItem;
 
     @Before
     public void setUp() {
         dao = new InMemorySalesSystemDAO();
+        shoppingCart = new ShoppingCart(dao);
         stockItem = new StockItem(5L, "Test", "Test", 10.0, 50);
+    }
+
+    @Test
+    public void testAddingItemAlreadyInShoppingCart(){
+        SoldItem soldItem = new SoldItem(stockItem, 1);
+        shoppingCart.addItem(soldItem);
+        shoppingCart.addItem(soldItem);
+        assertEquals(2, shoppingCart.getAll().get(0).getQuantity(),0.001);
     }
     @Test
     public void testAddingItemBeginsAndCommitsTransaction(){

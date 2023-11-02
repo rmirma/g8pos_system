@@ -117,7 +117,6 @@ public class PurchaseController implements Initializable {
         try {
             log.debug("Contents of the current basket:\n" + shoppingCart.getAll());
             purchaseTableView.getItems().clear();
-            dao.decreaseItemQuantites(shoppingCart.getAll());
             shoppingCart.submitCurrentPurchase();
             disableInputs();
         } catch (SalesSystemException e) {
@@ -187,14 +186,11 @@ public class PurchaseController implements Initializable {
         catch (NumberFormatException e) {quantity = 1;}
 
         SoldItem item = new SoldItem(stockItem, quantity);
-        if(shoppingCart.contains(item))
-            shoppingCart.increaseItemQuantity(item);
-        else{
-            shoppingCart.addItem(item);
+        if(!shoppingCart.contains(item))
             purchaseTableView.getItems().add(item);
-        }
-        priceLabel.setText(String.valueOf(Double.parseDouble(priceLabel.getText())+stockItem.getPrice()*quantity));
-        //purchaseTableView.setItems(FXCollections.observableList(shoppingCart.getAll()));
+        shoppingCart.addItem(item);
+        //shoppingCart.addItem(item, purchaseTableView);
+        priceLabel.setText(String.valueOf(shoppingCart.getTotalPrice()));
         purchaseTableView.refresh();
     }
 
@@ -203,7 +199,7 @@ public class PurchaseController implements Initializable {
         SoldItem selectedItem = purchaseTableView.getSelectionModel().getSelectedItem();
         shoppingCart.removeItem(selectedItem);
         purchaseTableView.getItems().remove(selectedItem);
-        priceLabel.setText(String.valueOf(Double.parseDouble(priceLabel.getText())-selectedItem.getPrice()*selectedItem.getQuantity()));
+        priceLabel.setText(String.valueOf(shoppingCart.getTotalPrice()));
     }
 
     /**

@@ -35,8 +35,6 @@ public interface SalesSystemDAO {
 
     List<StockItem> findStockItem(String name);
 
-    void decreaseItemQuantites(List<SoldItem> items);
-
     void saveHistoryItem(HistoryItem item);
 
     void saveStockItem(StockItem stockItem);

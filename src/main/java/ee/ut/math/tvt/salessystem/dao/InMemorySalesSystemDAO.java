@@ -29,15 +29,6 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
         return stockItemList;
     }
 
-
-    @Override
-    public void decreaseItemQuantites(List<SoldItem> items){
-        for (SoldItem item : items) {
-            StockItem itemToDecrease = findStockItem(item.getId());
-            itemToDecrease.setQuantity(itemToDecrease.getQuantity()-item.getQuantity());
-        }
-    }
-
     @Override
     public StockItem findStockItem(long id) {
         for (StockItem item : stockItemList) {
