@@ -5,7 +5,7 @@
 <?import javafx.scene.control.cell.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
   <SplitPane dividerPositions="0.4" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
     <items>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="background_style" SplitPane.resizableWithParent="false">
@@ -79,27 +79,27 @@
 
                               <TableView fx:id="ShoppingCartView" AnchorPane.bottomAnchor="130.0">
                                  <columns>
-                                    <TableColumn text="Id">
+                                    <TableColumn fx:id="Id" text="Id">
                                        <cellValueFactory>
                                           <PropertyValueFactory property="id" />
                                        </cellValueFactory>
                                     </TableColumn>
-                                    <TableColumn text="Name">
+                                    <TableColumn fx:id="Name" text="Name">
                                        <cellValueFactory>
                                           <PropertyValueFactory property="name" />
                                        </cellValueFactory>
                                     </TableColumn>
-                                    <TableColumn text="Price">
+                                    <TableColumn fx:id="Price" text="Price">
                                        <cellValueFactory>
                                           <PropertyValueFactory property="price" />
                                        </cellValueFactory>
                                     </TableColumn>
-                                    <TableColumn text="Quantity">
+                                    <TableColumn fx:id="Quantity" text="Quantity">
                                        <cellValueFactory>
                                           <PropertyValueFactory property="quantity" />
                                        </cellValueFactory>
                                     </TableColumn>
-                                     <TableColumn text="Sum">
+                                     <TableColumn fx:id="Sum" text="Sum">
                                          <cellValueFactory>
                                              <PropertyValueFactory property="sum" />
                                          </cellValueFactory>

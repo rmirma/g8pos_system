@@ -7,7 +7,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -39,6 +41,20 @@ public class HistoryController implements Initializable {
     private TableView<SoldItem> ShoppingCartView;
 
 
+    //ShoppingCaryView columns
+    @FXML
+    private TableColumn<SoldItem,Long> Id;
+    @FXML
+    private TableColumn<SoldItem,String> Name;
+    @FXML
+    private TableColumn<SoldItem,String> Price;
+    @FXML
+    private TableColumn<SoldItem,String> Quantity;
+    @FXML
+    private TableColumn<SoldItem,String> Sum;
+
+
+
 
     //for showing last viewd HistoryItem's shopping cart contents
     private List<HistoryItem> itemsBetweenDates = new ArrayList<>();
@@ -56,6 +72,11 @@ public class HistoryController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         showAll();
+        //setting ShoppingCartView column values from SoldItem
+        Id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        Name.setCellValueFactory(new PropertyValueFactory<>("name"));
+        Price.setCellValueFactory(new PropertyValueFactory<>("price"));
+        Quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
     }
 
 
@@ -146,10 +167,8 @@ public class HistoryController implements Initializable {
      */
     @FXML
     public void showShoppingCartContents(){
-        //TODO fix the method, does not show contents of historyItem
         try{
             List<SoldItem> shoppingCart = HistoryView.getSelectionModel().getSelectedItem().getContents();
-            //TODO Logger shows it gets the item but for some reason it does not display it on GUI
             ShoppingCartView.setItems(FXCollections.observableList(shoppingCart));
             log.info("contents of purchase " + HistoryView.getSelectionModel().getSelectedItem().getDate() +
                     " " + HistoryView.getSelectionModel().getSelectedItem().getTime() + " shown");
