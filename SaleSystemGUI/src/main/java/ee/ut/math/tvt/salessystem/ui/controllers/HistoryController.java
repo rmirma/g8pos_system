@@ -133,7 +133,6 @@ public class HistoryController implements Initializable {
      */
     @FXML
     public void showBetweenDates(){
-        //TODO fix error handling
         itemsBetweenDates.clear();
         try{
             LocalDate start = startDate.getValue();
@@ -152,7 +151,10 @@ public class HistoryController implements Initializable {
                 HistoryView.refresh();
                 log.info("History shown between " + start + " - " + end);
             }else{
-                //TODO throw error (message??)
+                //shows error screen
+                SalesSystemUI.alert.setContentText("Please check that the dates are selected and that they are in logical order");
+                SalesSystemUI.alert.setTitle("ERROR with dates");
+                SalesSystemUI.alert.show();  //will autoclose on close
                 log.error("Error in loading showBetweenDates method in HistoryController.java");
             }
         }catch (Exception e) {
@@ -165,7 +167,7 @@ public class HistoryController implements Initializable {
     /**
      * Shows selected purchase (HistoryItems) shopping cart/purchase contents
      * in ShoppingCartView in HistoryTab.fxml.Gets HistoryItem from
-     * HistroyView.getSelectionModel(). If error occurs throws error/logs error
+     * HistroyView.getSelectionModel(). If error occurs logs error.
      */
     @FXML
     public void showShoppingCartContents(){
@@ -178,9 +180,6 @@ public class HistoryController implements Initializable {
         }catch (Exception e){
             //throw new SalesSystemException("error with loading contenst from selected purchase");
             log.error("error loading shoppingCartContents, reffer to showShoppingCartContents() in HistoryController");
-            SalesSystemUI.alert.setContentText("Error loading shopping cart contents, please ");
-            SalesSystemUI.alert.show();
-
             }
         }
     }//HistoryController

@@ -47,6 +47,7 @@ public class SalesSystemUI extends Application {
         alert.setTitle("Imput Error");    //can be changed on callout
         alert.setOnCloseRequest(event -> {
             alert.setContentText("placeholder for new content");
+            alert.setTitle("placeholder for new title");
             System.out.println(alert.getContentText());  //for testing
         });
     }

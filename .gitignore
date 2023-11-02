@@ -3,7 +3,7 @@
 .idea
 .project
 .settings
-bin/*
-/build
+bin/
+build/
 /SaleSystemGUI/build
 /SaleSystemCLI/build
