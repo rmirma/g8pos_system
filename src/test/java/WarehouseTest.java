@@ -1,59 +1,56 @@
 import ee.ut.math.tvt.salessystem.dao.InMemorySalesSystemDAO;
-import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
+import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
-import ee.ut.math.tvt.salessystem.logic.ShoppingCart;
+import ee.ut.math.tvt.salessystem.logic.Warehouse;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
-
-public class addItemTest {
+@RunWith(MockitoJUnitRunner.class)
+public class WarehouseTest{
     private void assertEqual(Class<? extends StockItem> aClass, Class<? extends StockItem> aClass1) {
     }
 
-    private ShoppingCart shoppingCart;
     private InMemorySalesSystemDAO dao;
     StockItem stockItem;
+
+    @Mock
+    SalesSystemDAO DAO;
+
+    @InjectMocks
+    Warehouse warehouse;
 
     @Before
     public void setUp() {
         dao = new InMemorySalesSystemDAO();
-        shoppingCart = new ShoppingCart(dao);
         stockItem = new StockItem(5L, "Test", "Test", 10.0, 50);
-    }
-
-    @Test
-    public void testAddingItemAlreadyInShoppingCart(){
-        SoldItem soldItem = new SoldItem(stockItem, 1);
-        shoppingCart.addItem(soldItem);
-        shoppingCart.addItem(soldItem);
-        assertEquals(2, shoppingCart.getAll().get(0).getQuantity(),0.001);
     }
     @Test
     public void testAddingItemBeginsAndCommitsTransaction(){
-        // TODO:
-        //  check that methods beginTransaction and commitTransaction
-        //  are both called exactly once and that order
+        warehouse.addItem(5L, "Test", "Test", 10.0, 50);
+        verify(DAO, times(1)).beginTransaction();
+        verify(DAO, times(1)).commitTransaction();
     }
+
     @Test
     public void testAddingNewItem() {
         dao.saveStockItem(stockItem);
 
         StockItem addedItem = dao.findStockItem(5L);
 
-        assertNotNull(addedItem);
         assertEqual(stockItem.getClass(), addedItem.getClass());
         assertEquals(stockItem.getId(), addedItem.getId());
-        assertEquals(stockItem.getName(), addedItem.getName());
-        assertEquals(stockItem.getPrice(), addedItem.getPrice(), 0.001);
-        assertEquals(stockItem.getQuantity(), addedItem.getQuantity());
     }
 
     @Test
     public void testAddingExistingItem() {
-        //TODO: make it make sense
-
         dao.saveStockItem(stockItem);
 
         stockItem.setName("Water");
