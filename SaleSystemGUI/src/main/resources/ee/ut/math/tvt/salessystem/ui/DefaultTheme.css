@@ -3,15 +3,23 @@
   b_color_f: #ba8e4559;
   sb_color: #ca7623;
   sb_color_f: #257456;
-  main_text_color: #000;
-  control_color: #4571ba;
-  selected_color: #b0ceff;
-  title_color: #7e7e7e;
-  -text-color: #fff;
+  main_text_color: #fff;
+  button_and_forms_text_colour: #000;
+  control_color: #406fb3;
+  selected_color: #6692d3;
+  /*#995cd6*/
+  /*#cc33cc*/
+  /*#3333cc*/
+  /*#8033CC*/
+  title_color: transparent;
+  -fx-background-image: url("bk2.png");
+}
+*{
+  -fx-background-color: transparent;
+  -fx-border-width: 0;
 }
 
 .background{
-  -fx-background-color: b_color;
 }
 
 .header{
@@ -28,18 +36,12 @@
 }
 
 .background_style{
-  /*-fx-background-color: b_color;*/
-  -fx-background-color: linear-gradient(
-          to bottom right,
-          b_color 20%,
-          sb_color_f 25%
-  ),
-  linear-gradient(to bottom right, b_color_f 50%, sb_color_f 55%),
-  linear-gradient(to bottom right, b_color_f 70%, sb_color_f 75%);
+  /*-fx-background-image: url("./bk-top.png");*/
+  /*-fx-background-color: #000; This makes the background behind the wave different */
 }
 
-.priceLabel{
-  -fx-background-color:  #7e7e7e;
+.background_style_team{
+  /*-fx-background-image: url("./bk.png");*/
 }
 
 .background_fills{
@@ -53,7 +55,7 @@
 .text-field{
   -fx-background-color: control_color;
   -fx-background-radius: 5px;
-  -fx-text-fill: main_text_color
+  -fx-text-fill: button_and_forms_text_colour;
 }
 
 .text-field:focused{
@@ -66,7 +68,6 @@
  */
 
 .border-pane .background_style{
-  -fx-background-color: b_color;
 }
 
 /*
@@ -87,13 +88,7 @@
 
 .table-view {
   -fx-base: transparent;
-  -fx-background-color: linear-gradient(
-          to bottom left,
-          b_color 20%,
-          sb_color_f 25%
-  ),
-  linear-gradient(to bottom left, b_color_f 50%, sb_color_f 55%),
-  linear-gradient(to bottom left, b_color_f 70%, sb_color_f 75%);
+  /*-fx-background-image: url("bk-bot.png");*/
   -fx-table-header-border-color: transparent;
   -fx-padding: 0;
 }
@@ -102,18 +97,11 @@
   -fx-base: transparent;
   -fx-background-color: transparent;
   -fx-table-header-border-color: transparent;
-  -fx-border-width: 1;
   -fx-border-color: black;
 }
 
 .warehouseStatus{
-  -fx-background-color: linear-gradient(
-          to bottom left,
-          b_color 20%,
-          sb_color_f 25%
-  ),
-  linear-gradient(to bottom left, b_color_f 50%, sb_color_f 55%),
-  linear-gradient(to bottom left, b_color_f 70%, sb_color_f 75%);
+  /*-fx-background-image: url("bk-bot.png");*/
 }
 
 .table-row-cell .table-cell {
@@ -138,12 +126,16 @@
 .table-view .column-header, .table-view .filler {
   -fx-size: 35;
   -fx-border-width: 0 1 1 1;
-  -fx-background-color: transparent;
   -fx-border-color: black;
 }
 
+.table-view .column-header{
+  -fx-background-color: control_color;
+  -fx-background-radius: 7px;
+}
+
 .table-view .column-header .label {
-  -fx-text-fill: main_text_color;
+  -fx-text-fill: button_and_forms_text_colour;
   -fx-alignment: center;
 }
 
@@ -181,13 +173,13 @@
 
 .tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-label {
   -fx-alignment: CENTER;
-  -fx-text-fill: main_text_color;
+  -fx-text-fill: button_and_forms_text_colour;
   -fx-font-weight: bold;
 }
 
 .tab-pane > .tab-header-area > .headers-region > .tab:selected > .tab-container > .tab-label {
   -fx-alignment: CENTER;
-  -fx-text-fill: main_text_color;
+  -fx-text-fill: button_and_forms_text_colour;
   -fx-font-weight: bold;
 }
 
@@ -197,8 +189,7 @@
 
 .tab-pane {
   -fx-tab-min-width:50px;
-  -fx-background-color: b_color;
-  -fx-text-fill: main_text_color;
+  -fx-text-fill: button_and_forms_text_colour;
 
 }
 
@@ -208,7 +199,7 @@
   -fx-background-radius: 5px;
   -fx-background-color: control_color;
   -fx-color: control_color;
-  -fx-text-fill: main_text_color;
+  -fx-text-fill: button_and_forms_text_colour;
   -fx-focus-color: transparent;
   -fx-faint-focus-color: transparent;
 }
@@ -220,12 +211,12 @@
 
 .tab-pane .tab:selected
 {
-  -fx-background-color: b_color;
+  /*-fx-background-color: b_color;*/
 }
 
 .tab-pane .tab:hover
 {
-  -fx-background-color: b_color;
+  /*-fx-background-color: b_color;*/
 }
 
 /*******
@@ -279,7 +270,7 @@
 
   -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
   -fx-font-size: 11pt;
-  -fx-text-fill: main_text_color;
+  -fx-text-fill: button_and_forms_text_colour;
 
 }
 

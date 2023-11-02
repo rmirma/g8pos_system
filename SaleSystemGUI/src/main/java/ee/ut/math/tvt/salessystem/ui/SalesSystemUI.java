@@ -16,6 +16,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
@@ -67,8 +69,8 @@ public class SalesSystemUI extends Application {
         teamTab.setContent(loadControls("TeamTab.fxml", new TeamController()));
         log.info("Team Tab is loaded");
 
-        Group root = new Group();
-        Scene scene = new Scene(root, 600, 500, Color.WHITE);
+        Pane root = new Pane();
+        Scene scene = new Scene(root, 600, 500);
         scene.getStylesheets().add(getClass().getResource("DefaultTheme.css").toExternalForm());
 
         BorderPane borderPane = new BorderPane();
