@@ -18,7 +18,7 @@ public class Warehouse {
             if (dao.findStockItem(barCode) != null) {
                 StockItem item = dao.findStockItem(barCode);
                 item.setName(name);
-                item.setQuantity(quantity);
+                item.setQuantity(item.getQuantity()+quantity);
                 item.setPrice(price);
 
                 dao.commitTransaction();

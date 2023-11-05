@@ -5,13 +5,13 @@ import ee.ut.math.tvt.salessystem.logic.Warehouse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.inOrder;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WarehouseTest{
@@ -35,8 +35,9 @@ public class WarehouseTest{
     @Test
     public void testAddingItemBeginsAndCommitsTransaction(){
         warehouse.addItem(5L, "Test", "Test", 10.0, 50);
-        verify(DAO, times(1)).beginTransaction();
-        verify(DAO, times(1)).commitTransaction();
+        InOrder inOrder = inOrder(DAO);
+        inOrder.verify(DAO).beginTransaction();
+        inOrder.verify(DAO).commitTransaction();
     }
 
     @Test

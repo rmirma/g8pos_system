@@ -120,7 +120,7 @@ public class StockController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("ERROR");
             alert.setHeaderText("Invalid amount of item");
-            alert.setContentText("Double check the Amount field");
+            alert.setContentText("Double check the Amount and Price fields");
             alert.showAndWait();
         }}
     }

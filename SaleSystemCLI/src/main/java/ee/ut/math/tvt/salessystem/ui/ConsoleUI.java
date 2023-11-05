@@ -169,16 +169,21 @@ public class ConsoleUI {
     private void addProductToWarehouse(String name, String price, String amount) {
         try {
             long id = dao.findStockItems().stream().mapToLong(StockItem::getId).max().orElse(0) + 1;
-            StockItem stockItem = new StockItem(id, name, name, Double.parseDouble(price), Integer.parseInt(amount));
-            dao.saveStockItem(stockItem);
-            System.out.println("Item added to stock:");
-            System.out.println("-------------------------");
-            System.out.println(name + " " + price + "Euro (" + amount + " items)");
-            System.out.println("-------------------------");
-        } catch (NumberFormatException e) {
+            if (Double.parseDouble(price) < 0 || Integer.parseInt(amount) < 0) {
+                throw new NumberFormatException("Price and amount must be positive");
+            } else {
+                StockItem stockItem = new StockItem(id, name, name, Double.parseDouble(price), Integer.parseInt(amount));
+                dao.saveStockItem(stockItem);
+                System.out.println("Item added to stock:");
+                System.out.println("-------------------------");
+                System.out.println(name + " " + price + "Euro (" + amount + " items)");
+                System.out.println("-------------------------");
+            }
+        } catch(NumberFormatException e){
             log.error(e.getMessage());
-            System.out.println("Could not add item: "+ e.getMessage());
+            System.out.println("Could not add item: " + e.getMessage());
         }
+
     }
     private void removeProduct (String id) {
         long barCode = Long.parseLong(id);
