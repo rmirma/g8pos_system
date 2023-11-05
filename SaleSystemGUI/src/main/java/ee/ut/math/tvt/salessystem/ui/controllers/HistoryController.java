@@ -152,7 +152,7 @@ public class HistoryController implements Initializable {
                 log.info("History shown between " + start + " - " + end);
             }else{
                 //shows error screen
-                SalesSystemUI.alert.setContentText("Please check that the dates are selected and that they are in logical order");
+                SalesSystemUI.alert.setContentText("Please check that the dates are selected \nand that they are in logical order");
                 SalesSystemUI.alert.setTitle("ERROR with dates");
                 SalesSystemUI.alert.show();  //will autoclose on close
                 log.error("Error in loading showBetweenDates method in HistoryController.java");

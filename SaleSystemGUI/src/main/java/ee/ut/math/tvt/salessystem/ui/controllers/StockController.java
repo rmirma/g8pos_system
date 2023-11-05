@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -107,8 +108,21 @@ public class StockController implements Initializable {
             refreshStockItems();
             resetProductField();
         } catch (NumberFormatException e) {
+            if (e.getMessage() == "empty String") {
+                log.error("Product fields are empty: " + e.getMessage());
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("ERROR");
+                alert.setHeaderText("Invalid input in product fields");
+                alert.setContentText("Provide values of the product on the empty fields");
+                alert.showAndWait();
+            }else{
             log.error("Failed to add product: " + e.getMessage());
-        }
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ERROR");
+            alert.setHeaderText("Invalid amount of item");
+            alert.setContentText("Double check the Amount field");
+            alert.showAndWait();
+        }}
     }
 
     @FXML

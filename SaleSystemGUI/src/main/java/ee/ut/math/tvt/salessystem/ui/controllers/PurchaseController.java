@@ -177,21 +177,43 @@ public class PurchaseController implements Initializable {
     public void addItemEventHandler() {
         // add chosen item to the shopping cart.
         StockItem stockItem = getStockItemByBarcode();
-        if (stockItem == null)
-            return;
+        if (stockItem != null) {
+            int quantity;
+            try {
+                quantity = Integer.parseInt(quantityField.getText());
+                if (stockItem.getQuantity() >= quantity){
+                    SoldItem item = new SoldItem(stockItem, quantity);
+                    if (!shoppingCart.contains(item))
+                        purchaseTableView.getItems().add(item);
+                    shoppingCart.addItem(item);
 
-        int quantity;
+                    priceLabel.setText(String.valueOf(shoppingCart.getTotalPrice()));
+                    purchaseTableView.refresh();
+                }else throw new SalesSystemException();
 
-        try {quantity = Integer.parseInt(quantityField.getText());}
-        catch (NumberFormatException e) {quantity = 1;}
-
-        SoldItem item = new SoldItem(stockItem, quantity);
-        if(!shoppingCart.contains(item))
-            purchaseTableView.getItems().add(item);
-        shoppingCart.addItem(item);
-        //shoppingCart.addItem(item, purchaseTableView);
-        priceLabel.setText(String.valueOf(shoppingCart.getTotalPrice()));
-        purchaseTableView.refresh();
+            } catch (SalesSystemException e) {
+                log.error(e);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("ERROR");
+                alert.setHeaderText("Not enough items in stock");
+                alert.setContentText("We have only " + stockItem.getQuantity() + " " + stockItem.getName() + " in stock");
+                alert.showAndWait();
+            } catch (NumberFormatException e) {
+                log.error(e);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("ERROR");
+                alert.setHeaderText("Invalid amount of item");
+                alert.setContentText("Check the Amount field on the purchase");
+                alert.showAndWait();
+            }
+        }else {
+            log.error("Purchasable product was not selected");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ERROR");
+            alert.setHeaderText("Purchasable product was not selected");
+            alert.setContentText("Check the Name field on the purchase");
+            alert.showAndWait();
+        }
     }
 
     @FXML
