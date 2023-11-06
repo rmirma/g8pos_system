@@ -55,13 +55,14 @@ public class SalesSystemUI extends Application {
         Tab purchaseTab = new Tab();
         purchaseTab.setText("Point-of-sale");
         purchaseTab.setClosable(false);
-        purchaseTab.setContent(loadControls("PurchaseTab.fxml", new PurchaseController(dao, shoppingCart)));
+        PurchaseController pc = new PurchaseController(dao, shoppingCart);
+        purchaseTab.setContent(loadControls("PurchaseTab.fxml", pc));
         log.info("Purchase Tab is loaded");
 
         Tab stockTab = new Tab();
         stockTab.setText("Warehouse");
         stockTab.setClosable(false);
-        stockTab.setContent(loadControls("StockTab.fxml", new StockController(dao, new Warehouse(dao))));
+        stockTab.setContent(loadControls("StockTab.fxml", new StockController(dao, new Warehouse(dao), pc)));
         log.info("Stock Tab is loaded");
 
         Tab historyTab = new Tab();

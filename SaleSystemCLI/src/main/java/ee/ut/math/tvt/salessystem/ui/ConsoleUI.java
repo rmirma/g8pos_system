@@ -115,7 +115,7 @@ public class ConsoleUI {
         else if (c[0].equals("t"))
             showTeam();
         else if (c[0].equals("rm")&& c.length == 2)
-            removeProduct(c[1]);
+            removeProduct(c[1], dao.findStockItem(Long.parseLong(c[1])).getQuantity() );
         else if (c[0].equals("n") && c.length == 4)
             addProductToWarehouse(c[1], c[2], c[3]);
         else if (c[0].equals("a") && c.length == 3) {
@@ -125,6 +125,7 @@ public class ConsoleUI {
                 StockItem item = dao.findStockItem(idx);
                 if (item != null) {
                     cart.addItem(new SoldItem(item, Math.min(amount, item.getQuantity())));
+                    removeProduct(c[1], Math.min(amount, item.getQuantity()));
                 } else {
                     System.out.println("no stock item with id " + idx);
                 }
@@ -159,9 +160,7 @@ public class ConsoleUI {
             System.out.println("Would you like to continue? (y/n)");
             String input = sc.nextLine();
             if (input.equalsIgnoreCase("y")) {
-                SalesSystemDAO dao = new InMemorySalesSystemDAO();
-                ConsoleUI console = new ConsoleUI(dao);
-                console.run();
+                run();
             } else {
                 System.exit(0);
             }
@@ -190,10 +189,12 @@ public class ConsoleUI {
         }
 
     }
-    private void removeProduct (String id) {
+    private void removeProduct (String id, int nrToRemove) {
         long barCode = Long.parseLong(id);
         if (dao.findStockItem(barCode) != null) {
+            int currentQuantity = dao.findStockItem(barCode).getQuantity();
             dao.findStockItems().remove(dao.findStockItem(barCode));
+            dao.findStockItem(barCode).setQuantity(currentQuantity - nrToRemove);
             System.out.println("Item removed!");
         } else System.out.println("Could not find an item with id " + id);
     }

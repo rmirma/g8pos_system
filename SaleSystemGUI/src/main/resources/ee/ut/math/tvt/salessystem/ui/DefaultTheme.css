@@ -19,8 +19,6 @@
   -fx-border-width: 0;
 }
 
-.background{
-}
 
 .header{
   -fx-font-size: 42pt;
@@ -38,10 +36,6 @@
 .background_style{
   /*-fx-background-image: url("./bk-top.png");*/
   /*-fx-background-color: #000; This makes the background behind the wave different */
-}
-
-.background_style_team{
-  /*-fx-background-image: url("./bk.png");*/
 }
 
 .background_fills{
@@ -62,6 +56,37 @@
   -fx-background-color: selected_color;
 }
 
+
+/**
+  * DatePicker
+ */
+
+.date-picker-popup {
+  -fx-background-color: #eee;
+}
+
+.date-picker-popup .month-year-pane .label {
+  -fx-text-fill: #000;
+}
+
+.date-picker-popup .spinner .button,
+.date-picker-popup .spinner .button {
+  -fx-background-color: #fff;
+}
+
+.date-picker-popup .spinner .button .left-arrow,
+.date-picker-popup .spinner .button .right-arrow {
+  -fx-background-color: #000;
+}
+
+.date-picker .cell:hover {
+  -fx-background-color: #fff;
+  -fx-text-fill: #000;
+}
+.date-picker .selected {
+  -fx-background-color: #fff;
+  -fx-text-fill: #000;
+}
 
 /*
  * BorderPane

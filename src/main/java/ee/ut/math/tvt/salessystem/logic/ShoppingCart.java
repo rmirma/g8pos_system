@@ -30,17 +30,11 @@ public class ShoppingCart {
      * Add new SoldItem to table.
      */
     public void addItem(SoldItem item) {
-        boolean contains = false;
-        for (SoldItem soldItem : items)
-            if(Objects.equals(soldItem.getId(), item.getId())){
-                contains = true;
-                break;
-            }
-        if(contains){
-            SoldItem existingItem = items.stream().filter(soldItem -> soldItem.getId().equals(item.getId())).toList().get(0);
-            existingItem.setQuantity(existingItem.getQuantity()+item.getQuantity());
-        } else
-            items.add(item);
+        Optional<SoldItem> existingItem = contains(item);
+        existingItem.ifPresentOrElse(
+                (soldItem) -> {soldItem.setQuantity(soldItem.getQuantity()+item.getQuantity());},
+                () -> {items.add(item);}
+        );
         totalPrice += item.getPrice()*item.getQuantity();
     }
 
@@ -64,8 +58,8 @@ public class ShoppingCart {
         return items;
     }
 
-    public boolean contains(SoldItem item){
-        return items.stream().anyMatch(soldItem -> soldItem.getId().equals(item.getId()));
+    public Optional<SoldItem> contains(SoldItem item){
+        return items.stream().filter(soldItem -> soldItem.getId().equals(item.getId())).findFirst();
     }
 
     public void cancelCurrentPurchase() {
@@ -75,18 +69,15 @@ public class ShoppingCart {
     public void submitCurrentPurchase() {
         // note the use of transactions. InMemorySalesSystemDAO ignores transactions
         // but when you start using hibernate in lab5, then it will become relevant.
-        // what is a transaction? https://stackoverflow.com/q/974596
+        // what is a transaction? https ://stackoverflow.com/q/974596
         dao.beginTransaction();
+        if(items.isEmpty())
+            return;
         try {
             //totalPrice -> price of the shopping cart
-            Double totalPrice = 0.0;
             for (SoldItem item : items) {
-                //TODO decrease stock items
                 StockItem itemToDecrease = dao.findStockItem(item.getId());
                 itemToDecrease.setQuantity(itemToDecrease.getQuantity()-item.getQuantity());
-
-                //calculates the total price of the order,used in HistoryItem
-                totalPrice += item.getPrice()*item.getQuantity();
             }
 
             //new history item is created
@@ -98,6 +89,7 @@ public class ShoppingCart {
             log.info("new HistoryItem was created, time of creation: " + LocalDate.now() + " " + LocalTime.now());
             dao.commitTransaction();
             items.clear();
+            totalPrice = 0d;
         } catch (Exception e) {
             dao.rollbackTransaction();
             throw e;

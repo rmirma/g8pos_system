@@ -21,7 +21,7 @@
 
   <SplitPane dividerPositions="0.4" orientation="VERTICAL" prefHeight="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
     <items>
-      <AnchorPane prefHeight="200.0" styleClass="background_style" SplitPane.resizableWithParent="false">
+      <AnchorPane maxHeight="250.0" prefHeight="250.0" prefWidth="404.0" styleClass="background_style" SplitPane.resizableWithParent="false">
         <HBox alignment="TOP_CENTER" prefHeight="26.0" prefWidth="308.0" spacing="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
           <children>
             <Button fx:id="newPurchase" onAction="#newPurchaseButtonClicked" text="New Purchase" />
@@ -85,6 +85,10 @@
                         <ColumnConstraints />
                         <ColumnConstraints />
                         <ColumnConstraints />
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                        <ColumnConstraints />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -139,18 +143,21 @@
                         <RowConstraints />
                         <RowConstraints />
                         <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
               </rowConstraints>
               <children>
                 <Label text="Bar Code:" />
-                <Label text="Amount:" GridPane.rowIndex="1" />
-                <Label text="Name:" GridPane.rowIndex="2" />
+                <Label text="Amount:" GridPane.rowIndex="2" />
+                <Label text="Name:" GridPane.rowIndex="1" />
                 <Label text="Price" GridPane.rowIndex="3" />
                 <Button fx:id="removeItemButton" alignment="CENTER" mnemonicParsing="false" onAction="#removeItemEventHandler" text="Remove from cart" GridPane.Halignment="CENTER" GridPane.Valignment="CENTER" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="2" GridPane.rowSpan="2" />
                 <Button fx:id="addItemButton" alignment="CENTER" mnemonicParsing="false" onAction="#addItemEventHandler" text="Add to cart" GridPane.Halignment="CENTER" GridPane.Valignment="CENTER" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="1" />
                 <TextField fx:id="barCodeField" GridPane.columnIndex="1" />
-                <TextField fx:id="quantityField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="quantityField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 <TextField fx:id="priceField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <ComboBox fx:id="nameSelector" onAction="#selectItemEventHandler" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <ComboBox fx:id="comboBox" onAction="#selectItemEventHandler" prefWidth="150.0" visibleRowCount="3" GridPane.columnIndex="1" GridPane.rowIndex="1" />
               </children>
             </GridPane>
           </content>
@@ -164,7 +171,7 @@
               <items>
                 <AnchorPane prefWidth="402.0">
                      <children>
-                    <TitledPane alignment="CENTER" animated="false" collapsible="false" text="Shopping Cart" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <TitledPane alignment="CENTER" animated="false" collapsible="false" layoutY="17.0" prefHeight="202.0" prefWidth="402.0" text="Shopping Cart" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                       <content>
                         <TableView fx:id="purchaseTableView">
                           <columns>
