@@ -90,6 +90,7 @@ public class ConsoleUI {
         System.out.println("a IDX NR \tAdd NR of stock item with index IDX to the cart");
         System.out.println("p\t\t\tPurchase the shopping cart");
         System.out.println("r\t\t\tReset the shopping cart");
+        System.out.println("history\t\tcheck out history");
         System.out.println("t\t\t\tShow team info");
         System.out.println("-------------------------");
     }
@@ -105,7 +106,7 @@ public class ConsoleUI {
             showStock();
         else if (c[0].equals("c"))
             showCart();
-        else if (c[0].equals("history"))  //tmp
+        else if (c[0].equals("history"))
             history();
         else if (c[0].equals("p"))
             cart.submitCurrentPurchase();
@@ -206,7 +207,7 @@ public class ConsoleUI {
         while (historyUp) {
             System.out.print("> ");
             historyUp = HistoryControllerCLI.proccessHistoryCommand(input.readLine().trim(),historyUp);
-            System.out.println("---------------------done temp");
+            System.out.println("---------------------");
         }
 
     }

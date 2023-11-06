@@ -3,9 +3,11 @@ package ee.ut.math.tvt.salessystem.ui;
 
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.HistoryItem;
+import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
@@ -18,16 +20,16 @@ public class HistoryControllerCLI {
         HistoryControllerCLI.dao = dao;
     }
 
-    public static boolean showAllHistory(){
+    public static void showAllHistory(){
         System.out.println("date\t\ttime\t\t\t\ttotal");
         for (HistoryItem item : dao.getHistoryList()) {
-            System.out.println(item.getDate()+ " " +
-                    item.getTime() + '\t' + item.getTotal());
+            System.out.println(item.getDate()+ "  " +
+                    item.getTime() + "\t  " + item.getTotal());
         }
-        return true;
+        log.info("showing all of purchase history in CLI");
     }
 
-    public static boolean showLast10(){
+    public static void showLast10(){
         System.out.println("date\t\ttime\t\t\t\ttotal");
 
         List<HistoryItem> historyItems;
@@ -40,34 +42,70 @@ public class HistoryControllerCLI {
         }
 
         for (HistoryItem item : dao.getHistoryList()) {
-            System.out.println(item.getDate()+ " " +
-                    item.getTime() + '\t' + item.getTotal());
+            System.out.println(item.getDate()+ "  " +
+                    item.getTime() + "\t  " + item.getTotal());
         }
-        return true;
+        log.info("showing last 10 purchases made in CLI");
     }
 
-    public static boolean usage(){
-        System.out.println("-------------------------");
+    public static void usage(){
         System.out.println("Usage:");
-        System.out.println("showall\t\t shows all the purchase history");
-        System.out.println("showlast10\t\tshows last 10 confirmed purchases");
-        System.out.println("betweendates [Start Date] [End date]\tshows purchases between given dates." +
+        System.out.println("showall ->\t\t\tshows all the purchase history");
+        System.out.println("showlast10 ->\t\tshows last 10 confirmed purchases");
+        System.out.println("betweendates [Start Date] [End date] -> shows purchases between given dates." +
                         " date format: yy-mm-dd");
-        System.out.println("q\t\t leave history view");
-        System.out.println("help\t\tshow help menu");
-        System.out.println("-------------------------");
-        return true;
+        System.out.println("checkcontents [Date] [time]  ->\t\t\tshows the contents of a purchase, get the " +
+                "date and time by copying them from listings in history");
+        System.out.println("q ->\t leave history view");
+        System.out.println("help ->\t show help menu");
     }
 
-    private static boolean showBetweenDates(String command1, String command2) {
+    private static void showContents(String date, String time) {
+        try{
+            LocalDate dateToFind = LocalDate.parse(date);
+            LocalTime timeToFind = LocalTime.parse(time);
+
+            //find the purchase
+            List<SoldItem> contents = null;
+            for (HistoryItem item : dao.getHistoryList()) {
+                if (item.getDate().equals(dateToFind) &&
+                    item.getTime().equals(timeToFind)){
+                    contents = item.getContents();
+                    break;
+                }
+            }//for
+
+            //print contents
+            System.out.println("contents of purchase made at " + date + " " + time);
+            System.out.println("id\tname\t\tprice\tquantity\tsum");
+            if (contents != null){
+                for (SoldItem content : contents) {
+                    System.out.println(
+                            content.getId().toString() +
+                                '\t' + content.getName() +
+                                    '\t' + content.getPrice() +
+                                        "\t\t" + content.getQuantity() +
+                                            "\t\t\t" + content.getSum());
+
+                }
+                System.out.println('\n');
+                log.info("show contents of purchase made on " + date + " " + time);
+            }
+
+        }catch (DateTimeParseException e){
+            log.error("wrong date and time format when trying to show contents of a purchase");
+            System.out.println("wrong date and time, check format again");
+        }
+    }
+
+    private static void showBetweenDates(String command1, String command2) {
         try {
             LocalDate start = LocalDate.parse(command1);
             LocalDate end = LocalDate.parse(command2);
-            if (start != null &&
-                    end != null &&
-                    start.isBefore(end.plusDays(1)) &&   // +1 to be inclusive
+            if (start.isBefore(end.plusDays(1)) &&   // +1 to be inclusive
                     start.isBefore(LocalDate.now().plusDays(1))) {
 
+                System.out.println("purchases made between " + start + " - " + end);
                 System.out.println("date\t\ttime\t\t\t\ttotal");
 
                 for (HistoryItem item : dao.getHistoryList()) {
@@ -77,7 +115,7 @@ public class HistoryControllerCLI {
                                 item.getTime() + '\t' + item.getTotal());
                     }
                 }//for
-
+                System.out.println('\t');
                 log.info("History shown between " + start + " - " + end);
             } else {
                 System.out.println("error with base conditions, check that dates are in order");
@@ -87,7 +125,6 @@ public class HistoryControllerCLI {
             System.out.println("wrong date format, check that format is \"yy-mm-dd\" ");
             log.error("DateTimeParseException when trying to view history between dates");
         }
-        return true;
     }
 
     public static boolean proccessHistoryCommand(String input, boolean historyUp){
@@ -101,16 +138,22 @@ public class HistoryControllerCLI {
                 break;
             case "q":
                 return false;
+            case "checkcontents":
+                if (commands.length == 3) showContents(commands[1],commands[2]);
+                else System.out.println("wrong imput, chec that all the arguments are given");
+                break;
             case "help":
                 usage();
                 break;
             case "betweendates":
                 if (commands.length == 3) showBetweenDates(commands[1],commands[2]);
                 else System.out.println("wrong imput, check that both dates are given");
+                break;
             default: return true;
 
         }
         return true;
     }
+
 
 }
