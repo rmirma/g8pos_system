@@ -23,10 +23,12 @@ public class ConsoleUI {
 
     private final SalesSystemDAO dao;
     private final ShoppingCart cart;
+    private final HistoryControllerCLI historyControllerCLI;
 
     public ConsoleUI(SalesSystemDAO dao) {
         this.dao = dao;
         cart = new ShoppingCart(dao);
+        this.historyControllerCLI = new HistoryControllerCLI(this.dao);
     }
 
     public static void main(String[] args) throws Exception {
@@ -92,7 +94,7 @@ public class ConsoleUI {
         System.out.println("-------------------------");
     }
 
-    private void processCommand(String command) {
+    private void processCommand(String command) throws IOException {
         String[] c = command.split(" ");
 
         if (c[0].equals("h"))
@@ -103,6 +105,8 @@ public class ConsoleUI {
             showStock();
         else if (c[0].equals("c"))
             showCart();
+        else if (c[0].equals("history"))  //tmp
+            history();
         else if (c[0].equals("p"))
             cart.submitCurrentPurchase();
         else if (c[0].equals("r"))
@@ -191,5 +195,19 @@ public class ConsoleUI {
             dao.findStockItems().remove(dao.findStockItem(barCode));
             System.out.println("Item removed!");
         } else System.out.println("Could not find an item with id " + id);
+    }
+
+    private void history() throws IOException {
+
+        System.out.println("----------History---------");
+        HistoryControllerCLI.usage();
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        boolean historyUp = true;
+        while (historyUp) {
+            System.out.print("> ");
+            historyUp = HistoryControllerCLI.proccessHistoryCommand(input.readLine().trim(),historyUp);
+            System.out.println("---------------------done temp");
+        }
+
     }
 }
