@@ -5,11 +5,9 @@ import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 import ee.ut.math.tvt.salessystem.logic.ShoppingCart;
-import ee.ut.math.tvt.salessystem.ui.SalesSystemUI;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -45,7 +43,7 @@ public class PurchaseController implements Initializable {
     @FXML
     private Label priceLabel;
     @FXML
-    private ComboBox<String> nameSelector;
+    ComboBox<String> comboBox;
     @FXML
     private TextField priceField;
     @FXML
@@ -62,13 +60,12 @@ public class PurchaseController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Add items to combobox
-        dao.findStockItems().stream().map(StockItem::getName).forEach(name -> nameSelector.getItems().add(name));
-        removeItemButton.setVisible(false);
-        removeItemButton.visibleProperty().bind(Bindings.isNotNull(purchaseTableView.getSelectionModel().selectedItemProperty()));
+        dao.findStockItems().stream().map(StockItem::getName).forEach(name -> comboBox.getItems().add(name));
         cancelPurchase.setDisable(true);
         submitPurchase.setDisable(true);
+        removeItemButton.disableProperty().bind(Bindings.isEmpty(purchaseTableView.getSelectionModel().getSelectedItems()));
         //purchaseTableView.setItems(FXCollections.observableList(shoppingCart.getAll()));
-        disableProductField(true);
+        disableProductField();
         this.priceField.setDisable(true);
         this.barCodeField.setDisable(true);
 
@@ -127,7 +124,7 @@ public class PurchaseController implements Initializable {
     // switch UI to the state that allows to proceed with the purchase
     private void enableInputs() {
         resetProductField();
-        disableProductField(false);
+        enableProductField();
         cancelPurchase.setDisable(false);
         submitPurchase.setDisable(false);
         newPurchase.setDisable(true);
@@ -138,11 +135,11 @@ public class PurchaseController implements Initializable {
         resetProductField();
         priceLabel.setText("0");
         quantityField.setText("");
-        nameSelector.getSelectionModel().clearSelection();
+        comboBox.getSelectionModel().clearSelection();
         cancelPurchase.setDisable(true);
         submitPurchase.setDisable(true);
         newPurchase.setDisable(false);
-        disableProductField(true);
+        disableProductField();
     }
 
     private void clearInputs(){
@@ -177,51 +174,70 @@ public class PurchaseController implements Initializable {
     public void addItemEventHandler() {
         // add chosen item to the shopping cart.
         StockItem stockItem = getStockItemByBarcode();
-        if (stockItem != null) {
-            int quantity;
-            try {
-                quantity = Integer.parseInt(quantityField.getText());
-                if (stockItem.getQuantity() >= quantity){
-                    SoldItem item = new SoldItem(stockItem, quantity);
-                    if (!shoppingCart.contains(item))
-                        purchaseTableView.getItems().add(item);
-                    shoppingCart.addItem(item);
+        if (stockItem == null)
+            return;
 
-                    priceLabel.setText(String.valueOf(shoppingCart.getTotalPrice()));
-                    purchaseTableView.refresh();
-                }else throw new SalesSystemException();
+        int quantity;
+        int existingQuantity = 0;
 
-            } catch (SalesSystemException e) {
-                log.error(e);
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("ERROR");
-                alert.setHeaderText("Not enough items in stock");
-                alert.setContentText("We have only " + stockItem.getQuantity() + " " + stockItem.getName() + " in stock");
-                alert.showAndWait();
-            } catch (NumberFormatException e) {
-                log.error(e);
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("ERROR");
-                alert.setHeaderText("Invalid amount of item");
-                alert.setContentText("Check the Amount field on the purchase");
-                alert.showAndWait();
-            }
-        }else {
-            log.error("Purchasable product was not selected");
+        try {
+            quantity = Integer.parseInt(quantityField.getText());
+        }
+        catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("ERROR");
-            alert.setHeaderText("Purchasable product was not selected");
-            alert.setContentText("Check the Name field on the purchase");
+            alert.setHeaderText("Incorrect input in quantity field");
+            alert.setContentText("Quantity must be a number");
             alert.showAndWait();
+            return;
         }
+        if(quantity < 1){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ERROR");
+            alert.setHeaderText("Incorrect input in quantity field");
+            alert.setContentText("Quantity cannot be less than 1");
+            alert.showAndWait();
+            return;
+        }
+
+
+        SoldItem item = new SoldItem(stockItem, quantity);
+
+        Optional<SoldItem> existingItem = shoppingCart.contains(item);
+
+        if(existingItem.isPresent())
+            existingQuantity = existingItem.get().getQuantity();
+
+        if(quantity+existingQuantity > stockItem.getQuantity()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ERROR");
+            alert.setHeaderText("Purchase quantity exceeds warehouse quantity");
+            alert.setContentText("Quantity to purchase: " + (quantity+existingQuantity)
+                    + "\n    Quantity in shopping cart: "
+                    + existingQuantity+"\n    Quantity to add: " + quantity
+                    + "\nQuantity in warehouse:" + stockItem.getQuantity());
+            alert.showAndWait();
+            return;
+        }
+        if(shoppingCart.contains(item).isEmpty())
+            purchaseTableView.getItems().add(item);
+        shoppingCart.addItem(item);
+        //shoppingCart.addItem(item, purchaseTableView);
+        priceLabel.setText(String.valueOf(shoppingCart.getTotalPrice()));
+        log.info("Added item to shopping cart");
+        purchaseTableView.refresh();
     }
 
+    /**
+     * Select and remove item from table view
+     */
     @FXML
     public void removeItemEventHandler() {
         SoldItem selectedItem = purchaseTableView.getSelectionModel().getSelectedItem();
         shoppingCart.removeItem(selectedItem);
         purchaseTableView.getItems().remove(selectedItem);
         priceLabel.setText(String.valueOf(shoppingCart.getTotalPrice()));
+        log.info("Removed item from shopping cart");
     }
 
     /**
@@ -229,7 +245,7 @@ public class PurchaseController implements Initializable {
      */
     @FXML
     public void selectItemEventHandler(){
-        String productName = nameSelector.getValue();
+        String productName = comboBox.getValue();
         if(productName==null){
             clearInputs();
             return;
@@ -244,10 +260,16 @@ public class PurchaseController implements Initializable {
     /**
      * Sets whether or not the product component is enabled.
      */
-    private void disableProductField(boolean disable) {
-        this.addItemButton.setDisable(disable);
-        this.quantityField.setDisable(disable);
-        this.nameSelector.setDisable(disable);
+    private void disableProductField() {
+        this.addItemButton.setDisable(true);
+        this.quantityField.setDisable(true);
+        this.comboBox.setDisable(true);
+    }
+
+    private void enableProductField() {
+        this.addItemButton.setDisable(false);
+        this.quantityField.setDisable(false);
+        this.comboBox.setDisable(false);
     }
 
     /**

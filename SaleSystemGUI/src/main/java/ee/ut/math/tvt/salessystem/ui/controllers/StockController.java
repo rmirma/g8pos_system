@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -45,19 +46,19 @@ public class StockController implements Initializable {
     private TableView<StockItem> warehouseTableView;
     @FXML
     private AnchorPane upperSplitPane;
+    PurchaseController purchaseController;
 
 
-    public StockController(SalesSystemDAO dao, Warehouse warehouse) {
+    public StockController(SalesSystemDAO dao, Warehouse warehouse, PurchaseController purchaseController) {
         this.dao = dao;
         this.warehouse = warehouse;
+        this.purchaseController = purchaseController;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         refreshStockItems();
-        removeButton.setDisable(true);
-        BooleanBinding disableRemoveButton = Bindings.isNull(warehouseTableView.getSelectionModel().selectedItemProperty());
-        removeButton.disableProperty().bind(disableRemoveButton);
+        removeButton.disableProperty().bind(Bindings.isEmpty(warehouseTableView.getSelectionModel().getSelectedItems()));
         addFocusListener(upperSplitPane);
 
         barCodeField.focusedProperty().addListener((observable, oldPropertyValue, newPropertyValue) -> {
@@ -65,8 +66,8 @@ public class StockController implements Initializable {
                 fillInputsBySelectedStockItem();
             }
         });
-
     }
+
     private void addFocusListener(Node node) {
         node.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) { // If focus has moved to upperSplitPane or any of its children, clear the selection
@@ -90,6 +91,8 @@ public class StockController implements Initializable {
 
     private void refreshStockItems() {
         warehouseTableView.setItems(FXCollections.observableList(dao.findStockItems()));
+        purchaseController.comboBox.getItems().clear();
+        dao.findStockItems().stream().map(StockItem::getName).forEach(name -> purchaseController.comboBox.getItems().add(name));
         warehouseTableView.refresh();
     }
 

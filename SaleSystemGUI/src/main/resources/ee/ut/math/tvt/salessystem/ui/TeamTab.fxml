@@ -19,28 +19,28 @@
                           <items>
                             <AnchorPane minHeight="0.0" minWidth="0.0" SplitPane.resizableWithParent="false">
                                  <children>
-                                    <SplitPane dividerPositions="0.5" styleClass="sub_background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <SplitPane dividerPositions="0.5" styleClass="splitpane_team" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <items>
                                         <AnchorPane styleClass="sub_background" SplitPane.resizableWithParent="false">
                                              <children>
-                                                <VBox spacing="10.0" styleClass="sub_background" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                                                <VBox spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                                                    <children>
-                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Team name:" wrappingWidth="91.0" />
-                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Team leader:" wrappingWidth="96.0" />
-                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Team leader email:" wrappingWidth="127.0" />
-                                                                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Team members:" wrappingWidth="108.0" />
+                                                                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Team name:" wrappingWidth="91.0" />
+                                                                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Team leader:" wrappingWidth="96.0" />
+                                                                    <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Team leader email:" wrappingWidth="127.0" />
+                                                                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Team members:" wrappingWidth="108.0" />
                                                    </children>
                                                 </VBox>
                                              </children>
                                           </AnchorPane>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" styleClass="sub_background" SplitPane.resizableWithParent="false">
                                              <children>
-                                                <VBox spacing="10.0" styleClass="sub_background" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                                                <VBox spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                                                    <children>
-                                                      <Text fx:id="teamname" strokeType="OUTSIDE" strokeWidth="0.0" text="id=teamname" wrappingWidth="270.0" />
-                                                      <Text fx:id="leader" strokeType="OUTSIDE" strokeWidth="0.0" text="id=leader" wrappingWidth="270.0" />
-                                                      <Text fx:id="leaderemail" strokeType="OUTSIDE" strokeWidth="0.0" text="id=leaderemail" wrappingWidth="270.0" />
-                                                      <Text fx:id="teammembers" strokeType="OUTSIDE" strokeWidth="0.0" text="id=teammembers" wrappingWidth="270.0" />
+                                                      <Text fx:id="teamname" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="id=teamname" wrappingWidth="270.0" />
+                                                      <Text fx:id="leader" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="id=leader" wrappingWidth="270.0" />
+                                                      <Text fx:id="leaderemail" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="id=leaderemail" wrappingWidth="270.0" />
+                                                      <Text fx:id="teammembers" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="id=teammembers" wrappingWidth="270.0" />
                                                    </children>
                                                 </VBox>
                                              </children>
