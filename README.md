@@ -15,6 +15,7 @@ https://bitbucket.org/ajutinenimi/lg8-javaenjoyers/commits/tag/homework-3
 
 ## Homework 4:
 Task 1 - The Debugger: https://bitbucket.org/ajutinenimi/lg8-javaenjoyers/wiki/hw4
+https://bitbucket.org/ajutinenimi/lg8-javaenjoyers/commits/tag/homework-4
 
 ## Homework 5:
 <Links to the solution>
