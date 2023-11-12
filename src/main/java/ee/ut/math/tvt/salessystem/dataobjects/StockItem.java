@@ -1,14 +1,27 @@
 package ee.ut.math.tvt.salessystem.dataobjects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * Stock item.
  */
+@Entity
+
+@Table(name = "STOCK_ITEM")
 public class StockItem {
 
+    @Id
     private Long id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "price")
     private double price;
+    @Column(name = "description")
     private String description;
+    @Column(name = "quantity")
     private int quantity;
 
     public StockItem() {

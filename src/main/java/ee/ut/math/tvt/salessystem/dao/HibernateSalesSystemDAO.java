@@ -1,63 +1,69 @@
 package ee.ut.math.tvt.salessystem.dao;
+
 import ee.ut.math.tvt.salessystem.dataobjects.HistoryItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.Collections;
 import java.util.List;
 
 public class HibernateSalesSystemDAO implements SalesSystemDAO {
     private final EntityManagerFactory emf;
     private final EntityManager em;
-    public HibernateSalesSystemDAO () {
+
+    public HibernateSalesSystemDAO() {
 // if you get ConnectException / JDBCConnectionException then you
 // probably forgot to start the database before starting the application
-        emf = Persistence.createEntityManagerFactory ("pos");
-        em = emf.createEntityManager ();
+        emf = Persistence.createEntityManagerFactory("pos");
+        em = emf.createEntityManager();
     }
+
     // TODO implement missing methods
-    public void close () {
-        em.close ();
-        emf.close ();
+    public void close() {
+        em.close();
+        emf.close();
     }
 
     @Override
     public List<StockItem> findStockItems() {
-        return null;
+        return em.createQuery("from StockItem", StockItem.class).getResultList();
     }
 
     @Override
     public StockItem findStockItem(long id) {
-        return null;
+        return em.find(StockItem.class, id);
     }
 
     @Override
     public List<StockItem> findStockItem(String name) {
-        return null;
+        return Collections.singletonList(em.find(StockItem.class, name));
     }
 
     @Override
     public void saveHistoryItem(HistoryItem item) {
-
+        em.merge(item);
     }
 
     @Override
     public void saveStockItem(StockItem stockItem) {
-
+        em.merge(stockItem);
     }
 
     @Override
-    public void beginTransaction () {
-        em.getTransaction (). begin ();
+    public void beginTransaction() {
+        em.getTransaction().begin();
     }
+
     @Override
-    public void rollbackTransaction () {
-        em.getTransaction (). rollback ();
+    public void rollbackTransaction() {
+        em.getTransaction().rollback();
     }
+
     @Override
-    public void commitTransaction () {
-        em.getTransaction (). commit ();
+    public void commitTransaction() {
+        em.getTransaction().commit();
     }
 
     @Override
