@@ -1,9 +1,7 @@
 package ee.ut.math.tvt.salessystem.dataobjects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * Stock item.
@@ -14,6 +12,7 @@ import javax.persistence.Table;
 public class StockItem {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "name")
     private String name;
@@ -24,6 +23,8 @@ public class StockItem {
     @Column(name = "quantity")
     private int quantity;
 
+    @OneToMany(mappedBy = "stockItem")
+    private List<SoldItem> soldItem;
     public StockItem() {
     }
 

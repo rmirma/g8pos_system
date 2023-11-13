@@ -73,7 +73,7 @@ public class HistoryController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        showAll();
+        //showAll();
         //setting ShoppingCartView column values from SoldItem
         Id.setCellValueFactory(new PropertyValueFactory<>("id"));
         Name.setCellValueFactory(new PropertyValueFactory<>("name"));

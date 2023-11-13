@@ -16,8 +16,9 @@ import java.util.List;
 public class HistoryItem {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToMany
+    @Transient
     public List<SoldItem> contents; //contens of the purchse
     @Column(name = "date")
     private LocalDate date;  //date of the transaction

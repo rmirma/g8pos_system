@@ -12,8 +12,10 @@ import javax.persistence.*;
 public class SoldItem {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "sold_item_id")
     private StockItem stockItem;
     @Column(name = "name")
     private String name;
@@ -29,7 +31,6 @@ public class SoldItem {
 
     public SoldItem(StockItem stockItem, int quantity) {
         this.stockItem = stockItem;
-        this.id = stockItem.getId();
         this.name = stockItem.getName();
         this.price = stockItem.getPrice();
         this.quantity = quantity;

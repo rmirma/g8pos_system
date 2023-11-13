@@ -3,6 +3,7 @@ package ee.ut.math.tvt.salessystem.ui;
 import ee.ut.math.tvt.salessystem.dao.HibernateSalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dao.InMemorySalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
+import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 import ee.ut.math.tvt.salessystem.logic.ShoppingCart;
 import ee.ut.math.tvt.salessystem.logic.Warehouse;
 import ee.ut.math.tvt.salessystem.ui.controllers.HistoryController;
@@ -25,6 +26,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 /**
  * Graphical user interface of the sales system.
@@ -42,7 +44,7 @@ public class SalesSystemUI extends Application {
         dao = new HibernateSalesSystemDAO();
         shoppingCart = new ShoppingCart(dao);
         alert.setResizable(false);
-        alert.setTitle("Imput Error");    //can be changed on callout
+        alert.setTitle("Input Error");    //can be changed on callout
         alert.setOnCloseRequest(event -> {
             alert.setContentText("placeholder for new content");
             alert.setTitle("placeholder for new title");
