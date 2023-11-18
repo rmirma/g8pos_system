@@ -149,11 +149,13 @@ public class PurchaseController implements Initializable {
     }
 
     private void fillInputsBySelectedStockItem() {
-        Optional<StockItem> stockItem = Optional.ofNullable(getStockItemByBarcode());
-        stockItem.ifPresentOrElse(
-                (item) -> {priceField.setText(String.valueOf(item.getPrice()));},
-                () -> {resetProductField();}
-        );
+        StockItem stockItem = getStockItemByBarcode();
+        if (stockItem != null) {
+            priceField.setText(String.valueOf(stockItem.getPrice()));
+            log.debug("Text fields filled");
+        } else {
+            resetProductField();
+        }
     }
 
     // Search the warehouse for a StockItem with the bar code entered
@@ -250,9 +252,9 @@ public class PurchaseController implements Initializable {
             clearInputs();
             return;
         }
-        List<StockItem> stockItem = dao.findStockItem(productName);
-        long id = stockItem.get(0).getId();
-        double price = stockItem.get(0).getPrice();
+        //StockItem stockItem = dao.findStockItem(productName);
+        long id = dao.findStockItem(productName).getId();
+        double price = dao.findStockItem(id).getPrice();
         barCodeField.setText(Long.toString(id));
         priceField.setText(Double.toString(price));
     }

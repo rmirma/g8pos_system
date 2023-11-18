@@ -37,8 +37,10 @@ public class HibernateSalesSystemDAO implements SalesSystemDAO {
     }
 
     @Override
-    public List<StockItem> findStockItem(String name) {
-        return Collections.singletonList(em.find(StockItem.class, name));
+    public StockItem findStockItem(String name) {
+        return em.createQuery("from StockItem where name = :name", StockItem.class)
+                .setParameter("name", name)
+                .getSingleResult();
     }
 
     @Override

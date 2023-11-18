@@ -1,7 +1,6 @@
 package ee.ut.math.tvt.salessystem.dao;
 
 import ee.ut.math.tvt.salessystem.dataobjects.HistoryItem;
-import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 
 import java.util.List;
@@ -33,7 +32,7 @@ public interface SalesSystemDAO {
 
     StockItem findStockItem(long id);
 
-    List<StockItem> findStockItem(String name);
+    StockItem findStockItem(String name);
 
     void saveHistoryItem(HistoryItem item);
 

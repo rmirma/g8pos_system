@@ -1,7 +1,6 @@
 package ee.ut.math.tvt.salessystem.dao;
 
 import ee.ut.math.tvt.salessystem.dataobjects.HistoryItem;
-import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 
 import java.util.ArrayList;
@@ -38,14 +37,14 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
         return null;
     }
     @Override
-    public List<StockItem> findStockItem(String name) {
+    public StockItem findStockItem(String name) {
         List<StockItem> stockItems = new ArrayList<>();
         for (StockItem item : stockItemList) {
             if (Objects.equals(item.getName(), name)) {
                 stockItems.add(item);
             }
         }
-        return stockItems;
+        return stockItems.get(0);
     }
 
     /**
