@@ -33,13 +33,11 @@ public interface SalesSystemDAO {
 
     StockItem findStockItem(long id);
 
-    List<StockItem> findStockItem(String name);
-
     void saveHistoryItem(HistoryItem item);
 
     void saveStockItem(StockItem stockItem);
 
-    //void saveSoldItem(SoldItem item);
+    void saveSoldItem(SoldItem item);
 
     void beginTransaction();
 

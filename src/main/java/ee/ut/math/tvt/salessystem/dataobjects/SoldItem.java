@@ -7,7 +7,6 @@ import javax.persistence.*;
  * Already bought StockItem. SoldItem duplicates name and price for preserving history.
  */
 @Entity
-
 @Table(name="SOLD_ITEM")
 public class SoldItem {
 
@@ -33,6 +32,7 @@ public class SoldItem {
         this.stockItem = stockItem;
         this.name = stockItem.getName();
         this.price = stockItem.getPrice();
+        this.id = stockItem.getId();
         this.quantity = quantity;
     }
 

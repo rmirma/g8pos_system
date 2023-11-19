@@ -11,9 +11,11 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +31,7 @@ public class PurchaseController implements Initializable {
     private static final Logger log = LogManager.getLogger(PurchaseController.class);
     private final SalesSystemDAO dao;
     private final ShoppingCart shoppingCart;
-
+    Callback<ListView<StockItem>, ListCell<StockItem>> factory;
     @FXML
     private Button newPurchase;
     @FXML
@@ -43,7 +45,7 @@ public class PurchaseController implements Initializable {
     @FXML
     private Label priceLabel;
     @FXML
-    ComboBox<String> comboBox;
+    ComboBox<StockItem> comboBox;
     @FXML
     private TextField priceField;
     @FXML
@@ -52,31 +54,20 @@ public class PurchaseController implements Initializable {
     private Button removeItemButton;
     @FXML
     private TableView<SoldItem> purchaseTableView;
-    public PurchaseController(SalesSystemDAO dao, ShoppingCart shoppingCart) {
+    public PurchaseController(SalesSystemDAO dao, ShoppingCart shoppingCart, Callback<ListView<StockItem>, ListCell<StockItem>> factory) {
         this.dao = dao;
         this.shoppingCart = shoppingCart;
+        this.factory = factory;
+
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Add items to combobox
-        dao.findStockItems().stream().map(StockItem::getName).forEach(name -> comboBox.getItems().add(name));
-        cancelPurchase.setDisable(true);
-        submitPurchase.setDisable(true);
+        // configure combobox to work with stockitems
+        comboBox.setCellFactory(factory);
+        comboBox.setButtonCell(factory.call(null));
+        disableInputs();
         removeItemButton.disableProperty().bind(Bindings.isEmpty(purchaseTableView.getSelectionModel().getSelectedItems()));
-        //purchaseTableView.setItems(FXCollections.observableList(shoppingCart.getAll()));
-        disableProductField();
-        this.priceField.setDisable(true);
-        this.barCodeField.setDisable(true);
-
-        this.barCodeField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue) {
-                if (!newPropertyValue) {
-                    fillInputsBySelectedStockItem();
-                }
-            }
-        });
     }
 
     /** Event handler for the <code>new purchase</code> event. */
@@ -116,45 +107,13 @@ public class PurchaseController implements Initializable {
             purchaseTableView.getItems().clear();
             shoppingCart.submitCurrentPurchase();
             disableInputs();
+            newPurchase.setDisable(false);
         } catch (SalesSystemException e) {
             log.error(e.getMessage(), e);
         }
     }
 
-    // switch UI to the state that allows to proceed with the purchase
-    private void enableInputs() {
-        resetProductField();
-        enableProductField();
-        cancelPurchase.setDisable(false);
-        submitPurchase.setDisable(false);
-        newPurchase.setDisable(true);
-    }
 
-    // switch UI to the state that allows to initiate new purchase
-    private void disableInputs() {
-        resetProductField();
-        priceLabel.setText("0");
-        quantityField.setText("");
-        comboBox.getSelectionModel().clearSelection();
-        cancelPurchase.setDisable(true);
-        submitPurchase.setDisable(true);
-        newPurchase.setDisable(false);
-        disableProductField();
-    }
-
-    private void clearInputs(){
-        quantityField.setText("");
-        priceField.setText("");
-        barCodeField.setText("");
-    }
-
-    private void fillInputsBySelectedStockItem() {
-        Optional<StockItem> stockItem = Optional.ofNullable(getStockItemByBarcode());
-        stockItem.ifPresentOrElse(
-                (item) -> {priceField.setText(String.valueOf(item.getPrice()));},
-                () -> {resetProductField();}
-        );
-    }
 
     // Search the warehouse for a StockItem with the bar code entered
     // to the barCode textfield.
@@ -165,6 +124,15 @@ public class PurchaseController implements Initializable {
         } catch (NumberFormatException e) {
             return null;
         }
+    }
+
+    @FXML
+    public void selectItemFromTable(){
+        SoldItem soldItem = purchaseTableView.getSelectionModel().getSelectedItem();
+        barCodeField.setText(Long.toString(soldItem.getId()));
+        priceField.setText(Double.toString(soldItem.getPrice()));
+        quantityField.setText(Integer.toString(soldItem.getQuantity()));
+        comboBox.setValue(soldItem.getStockItem());
     }
 
     /**
@@ -200,7 +168,7 @@ public class PurchaseController implements Initializable {
             return;
         }
 
-
+        dao.beginTransaction();
         SoldItem item = new SoldItem(stockItem, quantity);
 
         Optional<SoldItem> existingItem = shoppingCart.contains(item);
@@ -217,15 +185,18 @@ public class PurchaseController implements Initializable {
                     + existingQuantity+"\n    Quantity to add: " + quantity
                     + "\nQuantity in warehouse:" + stockItem.getQuantity());
             alert.showAndWait();
+            dao.rollbackTransaction();
             return;
         }
         if(shoppingCart.contains(item).isEmpty())
             purchaseTableView.getItems().add(item);
         shoppingCart.addItem(item);
+        dao.saveSoldItem(item);
         //shoppingCart.addItem(item, purchaseTableView);
         priceLabel.setText(String.valueOf(shoppingCart.getTotalPrice()));
         log.info("Added item to shopping cart");
         purchaseTableView.refresh();
+        dao.commitTransaction();
     }
 
     /**
@@ -244,32 +215,32 @@ public class PurchaseController implements Initializable {
      * Display items in drop-down menu
      */
     @FXML
-    public void selectItemEventHandler(){
-        String productName = comboBox.getValue();
-        if(productName==null){
-            clearInputs();
+    public void selectItemComboboxEventHandler(){
+        StockItem product = comboBox.getValue();
+        if(product==null)
             return;
-        }
-        List<StockItem> stockItem = dao.findStockItem(productName);
-        long id = stockItem.get(0).getId();
-        double price = stockItem.get(0).getPrice();
-        barCodeField.setText(Long.toString(id));
-        priceField.setText(Double.toString(price));
+        barCodeField.setText(Long.toString(product.getId()));
+        priceField.setText(Double.toString(product.getPrice()));
     }
 
     /**
-     * Sets whether or not the product component is enabled.
+     * Disables the product component
      */
     private void disableProductField() {
-        this.addItemButton.setDisable(true);
-        this.quantityField.setDisable(true);
-        this.comboBox.setDisable(true);
+        cancelPurchase.setDisable(true);
+        submitPurchase.setDisable(true);
+        addItemButton.setDisable(true);
+        quantityField.setDisable(true);
+        comboBox.setDisable(true);
     }
 
+    /**
+     * Enables the product component
+     */
     private void enableProductField() {
-        this.addItemButton.setDisable(false);
-        this.quantityField.setDisable(false);
-        this.comboBox.setDisable(false);
+        addItemButton.setDisable(false);
+        quantityField.setDisable(false);
+        comboBox.setDisable(false);
     }
 
     /**
@@ -279,5 +250,21 @@ public class PurchaseController implements Initializable {
         barCodeField.setText("");
         quantityField.setText("1");
         priceField.setText("");
+        comboBox.getSelectionModel().clearSelection();
+    }
+
+    // switch UI to the state that allows to proceed with the purchase
+    private void enableInputs() {
+        resetProductField();
+        enableProductField();
+        cancelPurchase.setDisable(false);
+        submitPurchase.setDisable(false);
+        newPurchase.setDisable(true);
+    }
+
+    // switch UI to the state that allows to initiate new purchase
+    private void disableInputs() {
+        resetProductField();
+        disableProductField();
     }
 }

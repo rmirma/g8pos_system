@@ -7,3 +7,4 @@ bin/
 build/
 /SaleSystemGUI/build
 /SaleSystemCLI/build
+data/

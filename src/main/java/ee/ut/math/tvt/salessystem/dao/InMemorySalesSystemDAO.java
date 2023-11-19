@@ -37,17 +37,6 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
         }
         return null;
     }
-    @Override
-    public List<StockItem> findStockItem(String name) {
-        List<StockItem> stockItems = new ArrayList<>();
-        for (StockItem item : stockItemList) {
-            if (Objects.equals(item.getName(), name)) {
-                stockItems.add(item);
-            }
-        }
-        return stockItems;
-    }
-
     /**
      * Method returns The list of HistoryItems
      * @return list of historyItems
@@ -65,6 +54,9 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
     public void saveStockItem(StockItem stockItem) {
         stockItemList.add(stockItem);
     }
+
+    @Override
+    public void saveSoldItem(SoldItem item) {}
 
     @Override
     public void beginTransaction() {

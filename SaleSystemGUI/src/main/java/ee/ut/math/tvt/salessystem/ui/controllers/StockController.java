@@ -92,7 +92,7 @@ public class StockController implements Initializable {
     private void refreshStockItems() {
         warehouseTableView.setItems(FXCollections.observableList(dao.findStockItems()));
         purchaseController.comboBox.getItems().clear();
-        dao.findStockItems().stream().map(StockItem::getName).forEach(name -> purchaseController.comboBox.getItems().add(name));
+        purchaseController.comboBox.setItems(FXCollections.observableList(dao.findStockItems()));
         warehouseTableView.refresh();
     }
 

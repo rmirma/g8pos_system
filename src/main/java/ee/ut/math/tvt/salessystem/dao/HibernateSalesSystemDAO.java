@@ -1,6 +1,7 @@
 package ee.ut.math.tvt.salessystem.dao;
 
 import ee.ut.math.tvt.salessystem.dataobjects.HistoryItem;
+import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 
 import javax.persistence.EntityManager;
@@ -37,11 +38,6 @@ public class HibernateSalesSystemDAO implements SalesSystemDAO {
     }
 
     @Override
-    public List<StockItem> findStockItem(String name) {
-        return Collections.singletonList(em.find(StockItem.class, name));
-    }
-
-    @Override
     public void saveHistoryItem(HistoryItem item) {
         em.merge(item);
     }
@@ -49,6 +45,11 @@ public class HibernateSalesSystemDAO implements SalesSystemDAO {
     @Override
     public void saveStockItem(StockItem stockItem) {
         em.merge(stockItem);
+    }
+
+    @Override
+    public void saveSoldItem(SoldItem soldItem) {
+        em.merge(soldItem);
     }
 
     @Override

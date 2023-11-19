@@ -70,9 +70,9 @@ public class ShoppingCart {
         // note the use of transactions. InMemorySalesSystemDAO ignores transactions
         // but when you start using hibernate in lab5, then it will become relevant.
         // what is a transaction? https ://stackoverflow.com/q/974596
-        dao.beginTransaction();
         if(items.isEmpty())
             return;
+        dao.beginTransaction();
         try {
             //totalPrice -> price of the shopping cart
             for (SoldItem item : items) {

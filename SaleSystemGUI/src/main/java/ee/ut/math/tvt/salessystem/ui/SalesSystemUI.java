@@ -15,12 +15,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -56,10 +55,19 @@ public class SalesSystemUI extends Application {
     public void start(Stage primaryStage) throws Exception {
         log.info("javafx version: " + System.getProperty("javafx.runtime.version"));
 
+        //For adding stockitems to the combobox of the purchase tab
+        Callback<ListView<StockItem>, ListCell<StockItem>> factory = lv -> new ListCell<StockItem>() {
+            @Override
+            protected void updateItem(StockItem item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? "" : item.getName());
+            }
+        };
+
         Tab purchaseTab = new Tab();
         purchaseTab.setText("Point-of-sale");
         purchaseTab.setClosable(false);
-        PurchaseController pc = new PurchaseController(dao, shoppingCart);
+        PurchaseController pc = new PurchaseController(dao, shoppingCart, factory);
         purchaseTab.setContent(loadControls("PurchaseTab.fxml", pc));
         log.info("Purchase Tab is loaded");
 
