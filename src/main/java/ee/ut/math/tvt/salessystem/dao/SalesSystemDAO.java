@@ -4,6 +4,7 @@ import ee.ut.math.tvt.salessystem.dataobjects.HistoryItem;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -49,4 +50,8 @@ public interface SalesSystemDAO {
 
     List<HistoryItem> getHistoryList();
 
+    List<HistoryItem> getHistoryListLast10();
+
+    List<HistoryItem> getHistoryItemBetweenDates(LocalDate start, LocalDate end);
+    List<SoldItem> findContentsOfPurchase(HistoryItem item);
 }

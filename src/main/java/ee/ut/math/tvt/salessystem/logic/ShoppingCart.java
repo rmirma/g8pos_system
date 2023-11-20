@@ -73,19 +73,17 @@ public class ShoppingCart {
         if(items.isEmpty())
             return;
         dao.beginTransaction();
+        HistoryItem history = new HistoryItem(new ArrayList<>(), LocalDate.now(), LocalTime.now(), totalPrice);
         try {
             //totalPrice -> price of the shopping cart
             for (SoldItem item : items) {
                 StockItem itemToDecrease = dao.findStockItem(item.getId());
                 itemToDecrease.setQuantity(itemToDecrease.getQuantity()-item.getQuantity());
+                item.setHistoryItem(history);
+                history.setSoldItem(item);
             }
 
-            //new history item is created
-            dao.saveHistoryItem(new HistoryItem(
-                    new ArrayList<>(items),
-                    LocalDate.now(),
-                    LocalTime.now(),
-                    totalPrice));
+            dao.saveHistoryItem(history);
             log.info("new HistoryItem was created, time of creation: " + LocalDate.now() + " " + LocalTime.now());
             dao.commitTransaction();
             items.clear();

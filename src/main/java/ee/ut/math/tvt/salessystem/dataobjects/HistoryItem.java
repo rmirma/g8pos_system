@@ -1,6 +1,6 @@
 /**
  * HistoryItem is the object to hold the info of one singular purchase.
- * It holds the date, total price and the contents of the purchase.
+ * It holds the date,time, total price and the contents of the purchase.
  */
 
 package ee.ut.math.tvt.salessystem.dataobjects;
@@ -10,16 +10,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 @Entity
-
-@Table(name = "HISTORY_ITEM")
-
+@Table(name = "HISTORY")
 public class HistoryItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Transient
-    public List<SoldItem> contents; //contens of the purchse
+    @OneToMany(mappedBy = "history",cascade = CascadeType.ALL)
+    private List<SoldItem> contents; //contens of the purchse
     @Column(name = "date")
     private LocalDate date;  //date of the transaction
     @Column(name = "time")
@@ -34,13 +32,14 @@ public class HistoryItem {
         this.total = total;
     }
 
-    public HistoryItem() {
+    public HistoryItem(){}
 
+    public void setContents(List<SoldItem> contents) {
+        this.contents = contents;
     }
 
-
     //Getters for HistoryItem
-    public List<SoldItem> getContents() {
+    public List<SoldItem> getSoldItems() {
         return contents;
     }
 
@@ -53,4 +52,10 @@ public class HistoryItem {
     }
 
     public LocalTime getTime(){return time;}
+
+    public long getId() {
+        return id;
+    }
+
+    public void setSoldItem(SoldItem item){this.contents.add(item);}
 }

@@ -58,10 +58,6 @@ public class HistoryController implements Initializable {
 
 
 
-    //for showing last viewd HistoryItem's shopping cart contents
-    private List<HistoryItem> itemsBetweenDates = new ArrayList<>();
-
-
     /**
      * Creates new instance of a HistoryController. Must be tied to HistoryTab.fxml
      * @param dao > built in temporary database
@@ -87,9 +83,6 @@ public class HistoryController implements Initializable {
      * try to view HistoryItems between dates logged an error /threw error,
      * Then the return value will be empty ArrayList< HistoryItem >.
      */
-    public List<HistoryItem> getItemsBetweenDates(){
-        return itemsBetweenDates;
-    }
 
 
     /////////////////////////////////FXML/GUI methods////////////////////////////////////////////////
@@ -113,15 +106,9 @@ public class HistoryController implements Initializable {
      */
     @FXML
     public void showLast10(){
-        if (dao.getHistoryList().size() < 10){
-            HistoryView.setItems(FXCollections.observableList(dao.getHistoryList()));
+            HistoryView.setItems(FXCollections.observableList(dao.getHistoryListLast10()));
             HistoryView.refresh();
             log.info("Last 10 purchases shown in History tab");
-        }else{
-            HistoryView.setItems(FXCollections.observableList(dao.getHistoryList().subList(0,10)));
-            HistoryView.refresh();
-            log.info("Last 10 purchases shown in History tab");
-        }
     }
 
 
@@ -133,21 +120,16 @@ public class HistoryController implements Initializable {
      */
     @FXML
     public void showBetweenDates(){
-        itemsBetweenDates.clear();
         try{
             LocalDate start = startDate.getValue();
             LocalDate end = endDate.getValue();
+
             if (start != null &&
                     end != null &&
                         start.isBefore(end.plusDays(1)) &&   // +1 to be inclusive
                             start.isBefore(LocalDate.now().plusDays(1))){
-                for (HistoryItem item : dao.getHistoryList()) {
-                    if (item.getDate().isAfter(start.minusDays(1)) && // +1 to be inclusive
-                        item.getDate().isBefore(end.plusDays(1))){
-                        itemsBetweenDates.add(item);
-                    }
-                }
-                HistoryView.setItems(FXCollections.observableList(itemsBetweenDates));
+
+                HistoryView.setItems(FXCollections.observableList(dao.getHistoryItemBetweenDates(start,end)));
                 HistoryView.refresh();
                 log.info("History shown between " + start + " - " + end);
             }else{
@@ -158,7 +140,6 @@ public class HistoryController implements Initializable {
                 log.error("Error in loading showBetweenDates method in HistoryController.java");
             }
         }catch (Exception e) {
-            //throw new SalesSystemException("error in loading items between dates, see showBetweenDates()");
             log.error("Error in loading showBetweenDates method in HistoryController.java");
         }
     }
@@ -172,8 +153,8 @@ public class HistoryController implements Initializable {
     @FXML
     public void showShoppingCartContents(){
         try{
-            List<SoldItem> shoppingCart = HistoryView.getSelectionModel().getSelectedItem().getContents();
-            ShoppingCartView.setItems(FXCollections.observableList(shoppingCart));
+            HistoryItem contentsToFind = HistoryView.getSelectionModel().getSelectedItem();
+            ShoppingCartView.setItems(FXCollections.observableList(dao.findContentsOfPurchase(contentsToFind))); //TODO NOT WORKING
             log.info("contents of purchase " + HistoryView.getSelectionModel().getSelectedItem().getDate() +
                     " " + HistoryView.getSelectionModel().getSelectedItem().getTime() + " shown");
             ShoppingCartView.refresh();

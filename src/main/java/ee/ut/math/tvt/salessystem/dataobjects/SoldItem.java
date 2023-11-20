@@ -18,11 +18,13 @@ public class SoldItem {
     @Column(name = "name")
     private String name;
     @Column(name = "quantity")
-
     private Integer quantity;
     @Column(name = "price")
-
     private double price;
+
+    @ManyToOne
+    @JoinColumn(name = "HistoryItem_id")
+    private HistoryItem history;
 
     public SoldItem() {
     }
@@ -78,6 +80,7 @@ public class SoldItem {
     public void setStockItem(StockItem stockItem) {
         this.stockItem = stockItem;
     }
+    public void setHistoryItem(HistoryItem item){this.history = item;}
 
     @Override
     public String toString() {

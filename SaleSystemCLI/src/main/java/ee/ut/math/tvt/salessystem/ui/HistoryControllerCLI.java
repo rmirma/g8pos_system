@@ -70,7 +70,7 @@ public class HistoryControllerCLI {
             for (HistoryItem item : dao.getHistoryList()) {
                 if (item.getDate().equals(dateToFind) &&
                     item.getTime().equals(timeToFind)){
-                    contents = item.getContents();
+                    contents = item.getSoldItems();
                     break;
                 }
             }//for
