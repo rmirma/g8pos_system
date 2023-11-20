@@ -6,7 +6,6 @@ import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class InMemorySalesSystemDAO implements SalesSystemDAO {
 
@@ -57,6 +56,11 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
 
     @Override
     public void saveSoldItem(SoldItem item) {}
+
+    @Override
+    public void removeItem(StockItem StockItem) {
+        stockItemList.remove(StockItem);
+    }
 
     @Override
     public void beginTransaction() {

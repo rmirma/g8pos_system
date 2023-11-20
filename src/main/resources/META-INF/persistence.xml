@@ -28,7 +28,7 @@ http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
             data -->
             <!-- https://docs.oracle.com/javaee/7/tutorial/persistence-
             intro005.htm -->
-            <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+            <property name="javax.persistence.schema-generation.database.action" value="none"/>
         </properties>
     </persistence-unit>
 </persistence>

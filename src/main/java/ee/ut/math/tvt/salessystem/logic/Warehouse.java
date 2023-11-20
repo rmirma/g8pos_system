@@ -18,10 +18,15 @@ public class Warehouse {
             if (dao.findStockItem(barCode) != null) {
                 StockItem item = dao.findStockItem(barCode);
                 item.setName(name);
-                item.setQuantity(item.getQuantity()+quantity);
-                item.setPrice(price);
+                if (item.getQuantity()+quantity <= 0) {
+                    removeItem(barCode);
+                }
+                else {
+                    item.setQuantity(item.getQuantity() + quantity);
+                    item.setPrice(price);
 
-                dao.commitTransaction();
+                    dao.commitTransaction();
+                }
             } else {
                 dao.saveStockItem(new StockItem(barCode, name, desc, price, quantity));
                 dao.commitTransaction();
@@ -35,9 +40,10 @@ public class Warehouse {
         try {
             StockItem selectedItem = dao.findStockItem(barCode);
             if (selectedItem != null) {
-                dao.findStockItems().remove(selectedItem);
+                dao.removeItem(selectedItem);
             }
             dao.commitTransaction();
+            System.out.println("Item removed!");
         } catch (Exception e) {
             dao.rollbackTransaction();
             

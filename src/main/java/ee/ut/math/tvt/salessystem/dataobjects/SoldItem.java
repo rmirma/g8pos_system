@@ -11,7 +11,6 @@ import javax.persistence.*;
 public class SoldItem {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "sold_item_id")

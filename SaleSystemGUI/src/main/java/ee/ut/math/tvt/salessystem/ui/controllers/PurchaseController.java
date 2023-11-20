@@ -6,8 +6,6 @@ import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 import ee.ut.math.tvt.salessystem.logic.ShoppingCart;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -15,9 +13,7 @@ import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.awt.event.MouseEvent;
 import java.net.URL;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -91,6 +87,7 @@ public class PurchaseController implements Initializable {
             purchaseTableView.getItems().clear();
             shoppingCart.cancelCurrentPurchase();
             disableInputs();
+            priceLabel.setText("0");
         } catch (SalesSystemException e) {
             log.error(e.getMessage(), e);
         }
@@ -108,6 +105,7 @@ public class PurchaseController implements Initializable {
             shoppingCart.submitCurrentPurchase();
             disableInputs();
             newPurchase.setDisable(false);
+            priceLabel.setText("0");
         } catch (SalesSystemException e) {
             log.error(e.getMessage(), e);
         }

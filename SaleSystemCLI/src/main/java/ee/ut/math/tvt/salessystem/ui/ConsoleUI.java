@@ -2,15 +2,18 @@ package ee.ut.math.tvt.salessystem.ui;
 
 import ee.ut.math.tvt.salessystem.SalesSystemException;
 import ee.ut.math.tvt.salessystem.dao.HibernateSalesSystemDAO;
-import ee.ut.math.tvt.salessystem.dao.InMemorySalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 import ee.ut.math.tvt.salessystem.logic.ShoppingCart;
+import ee.ut.math.tvt.salessystem.logic.Warehouse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Properties;
@@ -25,11 +28,13 @@ public class ConsoleUI {
     private final SalesSystemDAO dao;
     private final ShoppingCart cart;
     private final HistoryControllerCLI historyControllerCLI;
+    private final Warehouse warehouse;
 
     public ConsoleUI(SalesSystemDAO dao) {
         this.dao = dao;
         cart = new ShoppingCart(dao);
         this.historyControllerCLI = new HistoryControllerCLI(this.dao);
+        this.warehouse = new Warehouse(this.dao);
     }
 
     public static void main(String[] args) throws Exception {
@@ -63,7 +68,7 @@ public class ConsoleUI {
         for (StockItem si : stockItems) {
             System.out.println(si.getId() + " " + si.getName() + " " + si.getPrice() + "Euro (" + si.getQuantity() + " items)");
         }
-        if (stockItems.size() == 0) {
+        if (stockItems.isEmpty()) {
             System.out.println("\tNothing");
         }
         System.out.println("-------------------------");
@@ -75,7 +80,7 @@ public class ConsoleUI {
         for (SoldItem si : cart.getAll()) {
             System.out.println(si.getName() + " " + si.getPrice() + "Euro (" + si.getQuantity() + " items)");
         }
-        if (cart.getAll().size() == 0) {
+        if (cart.getAll().isEmpty()) {
             System.out.println("\tNothing");
         }
         System.out.println("-------------------------");
@@ -117,7 +122,7 @@ public class ConsoleUI {
         else if (c[0].equals("t"))
             showTeam();
         else if (c[0].equals("rm")&& c.length == 2)
-            removeProduct(c[1], dao.findStockItem(Long.parseLong(c[1])).getQuantity() );
+            removeProduct(c[1]);
         else if (c[0].equals("n") && c.length == 4)
             addProductToWarehouse(c[1], c[2], c[3]);
         else if (c[0].equals("a") && c.length == 3) {
@@ -127,7 +132,7 @@ public class ConsoleUI {
                 StockItem item = dao.findStockItem(idx);
                 if (item != null) {
                     cart.addItem(new SoldItem(item, Math.min(amount, item.getQuantity())));
-                    removeProduct(c[1], Math.min(amount, item.getQuantity()));
+                    warehouse.addItem(idx, item.getName(), item.getDescription(), item.getPrice(), -amount);
                 } else {
                     System.out.println("no stock item with id " + idx);
                 }
@@ -178,11 +183,10 @@ public class ConsoleUI {
             if (Double.parseDouble(price) < 0 || Integer.parseInt(amount) < 0) {
                 throw new NumberFormatException("Price and amount must be positive");
             } else {
-                StockItem stockItem = new StockItem(id, name, name, Double.parseDouble(price), Integer.parseInt(amount));
-                dao.saveStockItem(stockItem);
+                warehouse.addItem(id, name, name, Double.parseDouble(price), Integer.parseInt(amount));
                 System.out.println("Item added to stock:");
                 System.out.println("-------------------------");
-                System.out.println(name + " " + price + "Euro (" + amount + " items)");
+                System.out.println(name + " " + price + " Euro (" + amount + " items)");
                 System.out.println("-------------------------");
             }
         } catch(NumberFormatException e){
@@ -191,14 +195,16 @@ public class ConsoleUI {
         }
 
     }
-    private void removeProduct (String id, int nrToRemove) {
-        long barCode = Long.parseLong(id);
-        if (dao.findStockItem(barCode) != null) {
-            int currentQuantity = dao.findStockItem(barCode).getQuantity();
-            dao.findStockItems().remove(dao.findStockItem(barCode));
-            dao.findStockItem(barCode).setQuantity(currentQuantity - nrToRemove);
-            System.out.println("Item removed!");
-        } else System.out.println("Could not find an item with id " + id);
+    private void removeProduct (String id) {
+        try {
+            long barCode = Long.parseLong(id);
+            if (dao.findStockItem(barCode) != null) {
+                warehouse.removeItem(barCode);
+            } else System.out.println("Could not find an item with id " + id);
+        }catch (NumberFormatException e) {
+            log.error(e.getMessage());
+            System.out.println(id +" is not a valid id: " + e.getMessage());
+        }
     }
 
     private void history() throws IOException {

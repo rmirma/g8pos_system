@@ -7,7 +7,6 @@ import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.util.Collections;
 import java.util.List;
 
 public class HibernateSalesSystemDAO implements SalesSystemDAO {
@@ -49,6 +48,11 @@ public class HibernateSalesSystemDAO implements SalesSystemDAO {
     @Override
     public void saveSoldItem(SoldItem soldItem) {
         em.merge(soldItem);
+    }
+
+    @Override
+    public void removeItem(StockItem StockItem) {
+        em.remove(StockItem);
     }
 
     @Override
