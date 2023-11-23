@@ -118,6 +118,14 @@ public class SalesSystemUI extends Application {
         return fxmlLoader.load();
     }
 
+    public static void showAlert(String header, String message){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("ERROR");
+        alert.setHeaderText(header);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 }
 
 

@@ -70,9 +70,6 @@ public class HibernateSalesSystemDAO implements SalesSystemDAO {
         em.getTransaction().commit();
     }
 
-
-
-
     //History methods
     @Override
     public void saveHistoryItem(HistoryItem item) {

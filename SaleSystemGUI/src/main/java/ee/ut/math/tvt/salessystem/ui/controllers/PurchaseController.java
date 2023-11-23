@@ -5,6 +5,7 @@ import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 import ee.ut.math.tvt.salessystem.logic.ShoppingCart;
+import ee.ut.math.tvt.salessystem.ui.SalesSystemUI;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -123,6 +124,9 @@ public class PurchaseController implements Initializable {
         }
     }
 
+    /**
+     * Auto fills the input forms when selecting an item from the shopping cart
+     */
     @FXML
     public void selectItemFromTable(){
         SoldItem soldItem = purchaseTableView.getSelectionModel().getSelectedItem();
@@ -133,67 +137,76 @@ public class PurchaseController implements Initializable {
     }
 
     /**
-     * Add new item to the cart.
+     * Gets the quantity typed in the respective field and
+     * shows an error if the input is invalid(isn't a number, is less than 1)
+     * @return the number in the form, if there's an error -1
      */
-    @FXML
-    public void addItemEventHandler() {
-        // add chosen item to the shopping cart.
-        StockItem stockItem = getStockItemByBarcode();
-        if (stockItem == null)
-            return;
-
-        int quantity;
-        int existingQuantity = 0;
-
+    private int getQuantityFromField(){
         try {
-            quantity = Integer.parseInt(quantityField.getText());
+            int quantity = Integer.parseInt(quantityField.getText());
+            if (quantity < 1) throw new SalesSystemException("Quantity cannot be less than 1");
+            return quantity;
         }
         catch (NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("ERROR");
-            alert.setHeaderText("Incorrect input in quantity field");
-            alert.setContentText("Quantity must be a number");
-            alert.showAndWait();
-            return;
+            SalesSystemUI.showAlert("Incorrect input in quantity field", "Quantity must be a number");
+        } catch(SalesSystemException e){
+            SalesSystemUI.showAlert("Incorrect input in quantity field", e.getMessage());
         }
-        if(quantity < 1){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("ERROR");
-            alert.setHeaderText("Incorrect input in quantity field");
-            alert.setContentText("Quantity cannot be less than 1");
-            alert.showAndWait();
-            return;
-        }
+        return -1;
+    }
 
-        dao.beginTransaction();
-        SoldItem item = new SoldItem(stockItem, quantity);
-
-        Optional<SoldItem> existingItem = shoppingCart.contains(item);
+    /**
+     * When adding an item to the shopping cart, this method checks if
+     * there is enough of that item in stock
+     * @param soldItem item to add
+     * @param stockItem existing item
+     * @return false if exceeds, true otherwise
+     */
+    private boolean quantityExceedsStock(SoldItem soldItem, StockItem stockItem){
+        int existingQuantity = 0;
+        int quantityToAdd = soldItem.getQuantity();
+        Optional<SoldItem> existingItem = shoppingCart.contains(soldItem);
 
         if(existingItem.isPresent())
             existingQuantity = existingItem.get().getQuantity();
 
-        if(quantity+existingQuantity > stockItem.getQuantity()){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("ERROR");
-            alert.setHeaderText("Purchase quantity exceeds warehouse quantity");
-            alert.setContentText("Quantity to purchase: " + (quantity+existingQuantity)
+        if(quantityToAdd+existingQuantity > stockItem.getQuantity()){
+            SalesSystemUI.showAlert("Purchase quantity exceeds warehouse quantity",
+                    "Quantity to purchase: " + (quantityToAdd+existingQuantity)
                     + "\n    Quantity in shopping cart: "
-                    + existingQuantity+"\n    Quantity to add: " + quantity
+                    + existingQuantity+"\n    Quantity to add: " + quantityToAdd
                     + "\nQuantity in warehouse:" + stockItem.getQuantity());
-            alert.showAndWait();
-            dao.rollbackTransaction();
-            return;
+            return true;
         }
+        return false;
+    }
+
+    /**
+     * Add new item to the cart.
+     */
+    @FXML
+    public void addItemEventHandler() {
+        StockItem stockItem = getStockItemByBarcode();
+        if (stockItem == null)
+            return;
+
+        int quantity = getQuantityFromField();
+        if (quantity  == -1)
+            return;
+
+        SoldItem item = new SoldItem(stockItem, quantity);
+        System.out.println(stockItem.getQuantity());
+        if (quantityExceedsStock(item, stockItem))
+            return;
+
         if(shoppingCart.contains(item).isEmpty())
             purchaseTableView.getItems().add(item);
         shoppingCart.addItem(item);
-        dao.saveSoldItem(item);
-        //shoppingCart.addItem(item, purchaseTableView);
+
         priceLabel.setText(String.valueOf(shoppingCart.getTotalPrice()));
-        log.info("Added item to shopping cart");
         purchaseTableView.refresh();
-        dao.commitTransaction();
+
+        log.info("Added item to shopping cart");
     }
 
     /**

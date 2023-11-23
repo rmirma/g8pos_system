@@ -38,13 +38,12 @@ public class ShoppingCart {
         totalPrice += item.getPrice()*item.getQuantity();
     }
 
+    /**
+      * Gets the total price owed for the shopping cart
+      */
     public double getTotalPrice(){
         return totalPrice;
     }
-
-    /*public void addItem(SoldItem item, TableView<SoldItem> purchaseTableView){
-        purchaseTableView.get
-    }*/
 
     /**
      * Remove a SoldItem from the table
@@ -54,22 +53,34 @@ public class ShoppingCart {
         totalPrice -= item.getPrice()*item.getQuantity();
     }
 
+    /**
+     * Get a list of all the items in the shopping cart
+     * @return list of SoldItems
+     */
     public List<SoldItem> getAll() {
         return items;
     }
 
+    /**
+     * Checks if the shopping cart has an item
+     * @param item SoldItem to be checked
+     * @return optional of type SoldItem
+     */
     public Optional<SoldItem> contains(SoldItem item){
         return items.stream().filter(soldItem -> soldItem.getId().equals(item.getId())).findFirst();
     }
 
+    /**
+     * Empties shopping cart
+     */
     public void cancelCurrentPurchase() {
         items.clear();
     }
 
+    /**
+     * Submits the ongoing purchase, saving the data into the database
+     */
     public void submitCurrentPurchase() {
-        // note the use of transactions. InMemorySalesSystemDAO ignores transactions
-        // but when you start using hibernate in lab5, then it will become relevant.
-        // what is a transaction? https ://stackoverflow.com/q/974596
         if(items.isEmpty())
             return;
         dao.beginTransaction();
@@ -77,17 +88,19 @@ public class ShoppingCart {
         try {
             //totalPrice -> price of the shopping cart
             for (SoldItem item : items) {
+                dao.saveSoldItem(item);
                 StockItem itemToDecrease = dao.findStockItem(item.getId());
                 itemToDecrease.setQuantity(itemToDecrease.getQuantity()-item.getQuantity());
                 item.setHistoryItem(history);
                 history.setSoldItem(item);
             }
-
             dao.saveHistoryItem(history);
-            log.info("new HistoryItem was created, time of creation: " + LocalDate.now() + " " + LocalTime.now());
             dao.commitTransaction();
+
             items.clear();
             totalPrice = 0d;
+            log.info("new HistoryItem was created, time of creation: " + LocalDate.now() + " " + LocalTime.now());
+
         } catch (Exception e) {
             dao.rollbackTransaction();
             throw e;
