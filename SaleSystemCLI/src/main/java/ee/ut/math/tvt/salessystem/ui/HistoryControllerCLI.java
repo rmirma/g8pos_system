@@ -32,16 +32,7 @@ public class HistoryControllerCLI {
     public static void showLast10(){
         System.out.println("date\t\ttime\t\t\t\ttotal");
 
-        List<HistoryItem> historyItems;
-        if (dao.getHistoryList().size() < 10){
-            historyItems = dao.getHistoryList();
-            log.info("Last 10 purchases shown in CLI");
-        }else{
-            historyItems = dao.getHistoryList().subList(0,10);
-            log.info("Last 10 purchases shown in CLI");
-        }
-
-        for (HistoryItem item : dao.getHistoryList()) {
+        for (HistoryItem item : dao.getHistoryListLast10()) {
             System.out.println(item.getDate()+ "  " +
                     item.getTime() + "\t  " + item.getTotal());
         }
@@ -65,32 +56,21 @@ public class HistoryControllerCLI {
             LocalDate dateToFind = LocalDate.parse(date);
             LocalTime timeToFind = LocalTime.parse(time);
 
-            //find the purchase
-            List<SoldItem> contents = null;
-            for (HistoryItem item : dao.getHistoryList()) {
-                if (item.getDate().equals(dateToFind) &&
-                    item.getTime().equals(timeToFind)){
-                    contents = item.getSoldItems();
-                    break;
-                }
-            }//for
-
             //print contents
             System.out.println("contents of purchase made at " + date + " " + time);
             System.out.println("id\tname\t\tprice\tquantity\tsum");
-            if (contents != null){
-                for (SoldItem content : contents) {
-                    System.out.println(
-                            content.getId().toString() +
-                                '\t' + content.getName() +
-                                    '\t' + content.getPrice() +
-                                        "\t\t" + content.getQuantity() +
-                                            "\t\t\t" + content.getSum());
+            for (SoldItem content : dao.findContentsOfPurchase(dateToFind,timeToFind)) {
+                System.out.println(
+                        content.getId().toString() +
+                            '\t' + content.getName() +
+                                '\t' + content.getPrice() +
+                                    "\t\t" + content.getQuantity() +
+                                        "\t\t\t" + content.getSum());
 
                 }
                 System.out.println('\n');
                 log.info("show contents of purchase made on " + date + " " + time);
-            }
+
 
         }catch (DateTimeParseException e){
             log.error("wrong date and time format when trying to show contents of a purchase");
@@ -108,13 +88,10 @@ public class HistoryControllerCLI {
                 System.out.println("purchases made between " + start + " - " + end);
                 System.out.println("date\t\ttime\t\t\t\ttotal");
 
-                for (HistoryItem item : dao.getHistoryList()) {
-                    if (item.getDate().isAfter(start.minusDays(1)) && // +1 to be inclusive
-                            item.getDate().isBefore(end.plusDays(1))) {
-                        System.out.println(item.getDate()+ " " +
-                                item.getTime() + '\t' + item.getTotal());
-                    }
-                }//for
+                for (HistoryItem item : dao.getHistoryItemBetweenDates(start,end)) {
+                    System.out.println(item.getDate()+ " " +
+                            item.getTime() + '\t' + item.getTotal());
+                }
                 System.out.println('\t');
                 log.info("History shown between " + start + " - " + end);
             } else {
@@ -140,7 +117,7 @@ public class HistoryControllerCLI {
                 return false;
             case "checkcontents":
                 if (commands.length == 3) showContents(commands[1],commands[2]);
-                else System.out.println("wrong imput, chec that all the arguments are given");
+                else System.out.println("wrong imput, check that all the arguments are given");
                 break;
             case "help":
                 usage();

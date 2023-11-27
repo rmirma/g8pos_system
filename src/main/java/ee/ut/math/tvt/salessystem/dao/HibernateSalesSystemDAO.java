@@ -9,6 +9,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -107,5 +108,14 @@ public class HibernateSalesSystemDAO implements SalesSystemDAO {
     public List<SoldItem> findContentsOfPurchase(HistoryItem item){
         String jql = "select e from SoldItem e where e.history = :item";
         return em.createQuery(jql, SoldItem.class).setParameter("item", item).getResultList();
+    }
+
+    public List<SoldItem> findContentsOfPurchase(LocalDate date, LocalTime time){
+        String jql = "select e from HistoryItem e where e.date = :date and e.time = :time";
+        HistoryItem history = em.createQuery(jql, HistoryItem.class).
+                setParameter("date", date).
+                setParameter("time",time).
+                getResultList().get(0);
+        return findContentsOfPurchase(history);
     }
 }

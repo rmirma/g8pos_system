@@ -5,6 +5,7 @@ import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +58,11 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
 
     @Override
     public List<SoldItem> findContentsOfPurchase(HistoryItem item) {
+        return null;
+    }
+
+    @Override
+    public List<SoldItem> findContentsOfPurchase(LocalDate date, LocalTime time) {
         return null;
     }
 
