@@ -14,9 +14,9 @@ import java.util.List;
 public class HistoryItem {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue()
     private long id;
-    @OneToMany(mappedBy = "history",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "history")
     private List<SoldItem> contents; //contens of the purchse
     @Column(name = "date")
     private LocalDate date;  //date of the transaction

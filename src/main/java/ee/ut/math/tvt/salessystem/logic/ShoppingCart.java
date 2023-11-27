@@ -54,6 +54,25 @@ public class ShoppingCart {
     }
 
     /**
+     * Remove a StockItem from the table
+     */
+    public void removeStockItem(StockItem item, int amount) {
+        for (SoldItem i : items) {
+            if (i.getStockItem().getId().equals(item.getId())) {
+                int newQuantity = i.getQuantity() - amount;
+                if (newQuantity < 0){
+                    throw new IllegalArgumentException("Not enough items in the shopping cart");
+                }
+                if (newQuantity == 0) {
+                    items.remove(i);
+                }
+                i.setQuantity(newQuantity);
+                totalPrice -= item.getPrice()*amount;
+            }
+        }
+    }
+
+    /**
      * Get a list of all the items in the shopping cart
      * @return list of SoldItems
      */

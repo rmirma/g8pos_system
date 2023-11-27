@@ -12,7 +12,7 @@ public class SoldItem {
 
     @Id
     private Long id;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "sold_item_id")
     private StockItem stockItem;
     @Column(name = "name")

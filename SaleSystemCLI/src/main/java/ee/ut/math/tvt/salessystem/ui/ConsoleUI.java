@@ -1,7 +1,7 @@
 package ee.ut.math.tvt.salessystem.ui;
 
 import ee.ut.math.tvt.salessystem.SalesSystemException;
-import ee.ut.math.tvt.salessystem.dao.HibernateSalesSystemDAO;
+import ee.ut.math.tvt.salessystem.dao.InMemorySalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
@@ -17,7 +17,6 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Properties;
-import java.util.Scanner;
 
 /**
  * A simple CLI (limited functionality).
@@ -38,8 +37,8 @@ public class ConsoleUI {
     }
 
     public static void main(String[] args) throws Exception {
-        //SalesSystemDAO dao = new InMemorySalesSystemDAO();
-        SalesSystemDAO dao = new HibernateSalesSystemDAO();
+        SalesSystemDAO dao = new InMemorySalesSystemDAO();
+        //SalesSystemDAO dao = new HibernateSalesSystemDAO();
         ConsoleUI console = new ConsoleUI(dao);
         console.run();
     }
@@ -55,10 +54,14 @@ public class ConsoleUI {
         printUsage();
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
-            System.out.print("> ");
-            processCommand(in.readLine().trim().toLowerCase());
-            System.out.println("Done. ");
+            waitForCommand(in);
         }
+    }
+
+    private void waitForCommand(BufferedReader in) throws IOException {
+        System.out.print("> ");
+        processCommand(in.readLine().trim().toLowerCase());
+        System.out.println("Done. ");
     }
 
     private void showStock() {
@@ -79,6 +82,7 @@ public class ConsoleUI {
         System.out.println("-------------------------");
         for (SoldItem si : cart.getAll()) {
             System.out.println(si.getName() + " " + si.getPrice() + "Euro (" + si.getQuantity() + " items)");
+            System.out.println("Sum: " + si.getSum() + "Euro");
         }
         if (cart.getAll().isEmpty()) {
             System.out.println("\tNothing");
@@ -95,6 +99,7 @@ public class ConsoleUI {
         System.out.println("rm IDX\t\tRemove product with index IDX from warehouse");
         System.out.println("c\t\t\tShow cart contents");
         System.out.println("a IDX NR \tAdd NR of stock item with index IDX to the cart");
+        System.out.println("crm IDX NR \tRemove NR of item with index IDX from the cart");
         System.out.println("p\t\t\tPurchase the shopping cart");
         System.out.println("r\t\t\tReset the shopping cart");
         System.out.println("history\t\tcheck out history");
@@ -122,29 +127,57 @@ public class ConsoleUI {
         else if (c[0].equals("t"))
             showTeam();
         else if (c[0].equals("rm")&& c.length == 2)
-            removeProduct(c[1]);
+            removeProductFromWarehouse(c[1]);
         else if (c[0].equals("n") && c.length == 4)
             addProductToWarehouse(c[1], c[2], c[3]);
-        else if (c[0].equals("a") && c.length == 3) {
-            try {
-                long idx = Long.parseLong(c[1]);
-                int amount = Integer.parseInt(c[2]);
-                StockItem item = dao.findStockItem(idx);
-                if (item != null) {
-                    cart.addItem(new SoldItem(item, Math.min(amount, item.getQuantity())));
-                    warehouse.addItem(idx, item.getName(), item.getDescription(), item.getPrice(), -amount);
-                } else {
-                    System.out.println("no stock item with id " + idx);
-                }
-            } catch (SalesSystemException | NoSuchElementException e) {
-                log.error(e.getMessage(), e);
-            }
+        else if (c[0].equals("a") && c.length == 3)
+            addItemToCart(c);
+        else if (c[0].equals("crm") && c.length == 3){
+            removeItemFromCart(c);
         } else {
             System.out.println("unknown command");
         }
     }
 
-    private void showTeam() {
+    private void addItemToCart(String[] c) {
+        try {
+            long idx = Long.parseLong(c[1]);
+            int amount = Integer.parseInt(c[2]);
+            StockItem item = dao.findStockItem(idx);
+            if (item != null) {
+                cart.addItem(new SoldItem(item, Math.min(amount, item.getQuantity())));
+                warehouse.addItem(idx, item.getName(), item.getDescription(), item.getPrice(), -amount);
+                System.out.println("Item successfully added to the cart.");
+                System.out.println("New total price is: " + cart.getTotalPrice());
+            } else {
+                System.out.println("no stock item with id " + idx + " found.");
+            }
+        } catch (SalesSystemException | NoSuchElementException e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    private void removeItemFromCart(String[] c) {
+        long idx = Long.parseLong(c[1]);
+        int amount = Integer.parseInt(c[2]);
+        StockItem item = dao.findStockItem(idx);
+
+        try {
+            if (item != null){
+            cart.removeStockItem(item, amount);
+            warehouse.addItem(idx, item.getName(), item.getDescription(), item.getPrice(), amount);
+            System.out.println("Item successfully removed from the cart.");
+            System.out.println("New total price is: " + cart.getTotalPrice());
+            } else {
+                System.out.println("no item in cart with id " + idx + " found.");
+            }
+        } catch (SalesSystemException | NoSuchElementException | IllegalArgumentException e) {
+            log.error(e.getMessage());
+        }
+
+    }
+
+    private void showTeam() throws IOException {
         log.info("Showing team info");
         System.out.println("===========================");
         System.out.println("=        Team info        =");
@@ -163,17 +196,10 @@ public class ConsoleUI {
             System.out.println(pros.get("teamMember4"));
             System.out.println("----------------------------------");
             log.debug("Team info successfully loaded");
-            Scanner sc = new Scanner(System.in);
-            System.out.println("Would you like to continue? (y/n)");
-            String input = sc.nextLine();
-            if (input.equalsIgnoreCase("y")) {
-                run();
-            } else {
-                System.exit(0);
-            }
+            waitForCommand(new BufferedReader(new InputStreamReader(System.in)));
         } catch (IOException e) {
-            System.out.println("Did not find the data");
-            System.exit(1);
+            System.out.println("Did not find the data. Check if the file exists and is reachable. (src/main/resources/application.properties)");
+            waitForCommand(new BufferedReader(new InputStreamReader(System.in)));
         }
     }
 
@@ -195,7 +221,7 @@ public class ConsoleUI {
         }
 
     }
-    private void removeProduct (String id) {
+    private void removeProductFromWarehouse(String id) {
         try {
             long barCode = Long.parseLong(id);
             if (dao.findStockItem(barCode) != null) {

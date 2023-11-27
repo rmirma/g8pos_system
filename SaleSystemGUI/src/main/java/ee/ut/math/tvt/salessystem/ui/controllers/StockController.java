@@ -1,8 +1,10 @@
 package ee.ut.math.tvt.salessystem.ui.controllers;
 
+import ee.ut.math.tvt.salessystem.SalesSystemException;
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 import ee.ut.math.tvt.salessystem.logic.Warehouse;
+import ee.ut.math.tvt.salessystem.ui.SalesSystemUI;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -111,18 +113,10 @@ public class StockController implements Initializable {
         } catch (NumberFormatException e) {
             if (e.getMessage() == "empty String") {
                 log.error("Product fields are empty: " + e.getMessage());
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("ERROR");
-                alert.setHeaderText("Invalid input in product fields");
-                alert.setContentText("Provide values of the product on the empty fields");
-                alert.showAndWait();
+                SalesSystemUI.showAlert("Invalid input in product fields", "Provide values of the product on the empty fields");
             }else{
             log.error("Failed to add product: " + e.getMessage());
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("ERROR");
-            alert.setHeaderText("Invalid amount of item");
-            alert.setContentText("Double check the Amount and Price fields");
-            alert.showAndWait();
+            SalesSystemUI.showAlert("Invalid amount of item", "Double check the Amount and Price fields");
         }}
     }
 

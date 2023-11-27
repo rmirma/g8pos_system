@@ -60,11 +60,7 @@ public class TeamController implements Initializable{
             log.debug("Team info successfully loaded");
         } catch (Exception e){
             log.error(e.getMessage(), e);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("ERROR");
-            alert.setHeaderText("Error reading 'application.properties' file for Team Tab");
-            alert.setContentText("Check if 'application.properties' file exists and is reachable. (src/main/resources/application.properties)");
-            alert.showAndWait();
+            SalesSystemUI.showAlert("Error reading 'application.properties' file for Team Tab", "Check if 'application.properties' file exists and is reachable. (src/main/resources/application.properties)");
         }
 
 
