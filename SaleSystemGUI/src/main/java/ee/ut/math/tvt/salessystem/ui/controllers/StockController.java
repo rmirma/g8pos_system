@@ -8,8 +8,6 @@ import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -59,33 +57,28 @@ public class StockController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         refreshStockItems();
         removeButton.disableProperty().bind(Bindings.isEmpty(warehouseTableView.getSelectionModel().getSelectedItems()));
-        addFocusListener(upperSplitPane);
-
+        warehouseTableView.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                StockItem selectedItem = warehouseTableView.getSelectionModel().getSelectedItem();
+                if (selectedItem != null) {
+                    fillInputsBySelectedStockItem(selectedItem);
+                    barCodeField.setDisable(true);
+                }
+            }
+        });
         barCodeField.focusedProperty().addListener((observable, oldPropertyValue, newPropertyValue) -> {
             if (!newPropertyValue) {
-                fillInputsBySelectedStockItem();
+                StockItem stockItem = getStockItemByBarcode();
+                fillInputsBySelectedStockItem(stockItem);
             }
         });
     }
-
-    private void addFocusListener(Node node) {
-        node.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) { // If focus has moved to upperSplitPane or any of its children, clear the selection
-                warehouseTableView.getSelectionModel().clearSelection();
-                refreshStockItems();
-            }
-        });
-
-        if (node instanceof Parent) {
-            ((Parent) node).getChildrenUnmodifiable().forEach(this::addFocusListener);
-        }
-    }
-
 
     @FXML
     public void refreshButtonClicked() {
         warehouseTableView.getSelectionModel().clearSelection();
         refreshStockItems();
+        barCodeField.setDisable(false);
         log.info("Stock items refreshed");
     }
 
@@ -109,6 +102,7 @@ public class StockController implements Initializable {
     @FXML
     protected void addProductButtonClicked() {
         try {
+            barCodeField.setDisable(false);
             String name = nameField.getText();
             String desc = nameField.getText();
             double price = Double.parseDouble(priceField.getText());
@@ -117,24 +111,31 @@ public class StockController implements Initializable {
             if (Objects.equals(String.valueOf(barCodeField.getText()), "")) {
                 id = generateUniqueId();
             } else id = Long.parseLong(barCodeField.getText());
-            warehouse.addItem(id, name, desc, price, quantity);
-            refreshStockItems();
-            resetProductField();
+            if (price < 0) SalesSystemUI.showAlert("Invalid price", "Price must be non-negative");
+            else if (quantity < 0) SalesSystemUI.showAlert("Invalid quantity", "Quantity must be non-negative");
+            else if (id < 0) SalesSystemUI.showAlert("Invalid id", "Id must be non-negative");
+            else {
+                warehouse.addItem(id, name, desc, price, quantity);
+                refreshStockItems();
+                resetProductField();
+            }
         } catch (NumberFormatException e) {
-            if (e.getMessage() == "empty String") {
+            if (Objects.equals(e.getMessage(), "empty String")) {
                 log.error("Product fields are empty: " + e.getMessage());
-                SalesSystemUI.showAlert("Invalid input in product fields", "Provide values of the product on the empty fields");
+                SalesSystemUI.showAlert("Empty product fields", "Please fill in all product fields");
             }else{
             log.error("Failed to add product: " + e.getMessage());
-            SalesSystemUI.showAlert("Invalid amount of item", "Double check the Amount and Price fields");
+            SalesSystemUI.showAlert("Invalid input", "Please enter numeric values for price, quantity, and id");
         }}
     }
 
     @FXML
     private void removeButtonClicked() {
-        StockItem selectedItem = warehouseTableView.getSelectionModel().getSelectedItem();
+        StockItem selectedItem = barCodeField.getText().isEmpty() ? warehouseTableView.getSelectionModel().getSelectedItem() : getStockItemByBarcode();
+        assert selectedItem != null;
         warehouse.removeItem(selectedItem.getId());
         refreshStockItems();
+        resetProductField();
     }
 
     private void resetProductField() {
@@ -147,8 +148,7 @@ public class StockController implements Initializable {
         return dao.findStockItems().stream().mapToLong(StockItem::getId).max().orElse(0) + 1;
     }
 
-    private void fillInputsBySelectedStockItem() {
-        StockItem stockItem = getStockItemByBarcode();
+    private void fillInputsBySelectedStockItem(StockItem stockItem) {
         if (stockItem != null) {
             barCodeField.setText(String.valueOf(stockItem.getId()));
             priceField.setText(String.valueOf(stockItem.getPrice()));
