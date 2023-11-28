@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <SplitPane dividerPositions="0.4" orientation="VERTICAL" prefHeight="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
@@ -36,6 +36,7 @@
                   <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints />
                 </rowConstraints>
                 <children>
                   <Label />
@@ -59,7 +60,7 @@
             <TitledPane alignment="CENTER" animated="false" collapsible="false" layoutY="-4.0" text="Warehouse status" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <BorderPane styleClass="warehouseStatus">
                 <center>
-                  <TableView fx:id="warehouseTableView" styleClass="warehouseTable">
+                  <TableView fx:id="warehouseTableView" onMouseClicked="#selectItemFromTable" styleClass="warehouseTable">
                     <columns>
                       <TableColumn text="Id">
                         <cellValueFactory>
