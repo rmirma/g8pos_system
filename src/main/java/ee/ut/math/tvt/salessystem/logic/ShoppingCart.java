@@ -1,5 +1,6 @@
 package ee.ut.math.tvt.salessystem.logic;
 
+import ee.ut.math.tvt.salessystem.SalesSystemException;
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.HistoryItem;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
@@ -30,9 +31,16 @@ public class ShoppingCart {
      * Add new SoldItem to table.
      */
     public void addItem(SoldItem item) {
+        if(item.getQuantity() < 1)
+            throw new SalesSystemException("Quantity cannot be less than 1");
+        if(item.getQuantity() > dao.findStockItem(item.getId()).getQuantity())
+            throw new SalesSystemException("Quantity to be added exceeds that in warehouse");
         Optional<SoldItem> existingItem = contains(item);
         existingItem.ifPresentOrElse(
-                (soldItem) -> {soldItem.setQuantity(soldItem.getQuantity()+item.getQuantity());},
+                (soldItem) -> {
+                    if(soldItem.getQuantity() + item.getQuantity() > dao.findStockItem(item.getId()).getQuantity())
+                        throw new SalesSystemException("Quantity to be added exceeds that in warehouse");
+                    soldItem.setQuantity(soldItem.getQuantity()+item.getQuantity());},
                 () -> {items.add(item);}
         );
         totalPrice += item.getPrice()*item.getQuantity();

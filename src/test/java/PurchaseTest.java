@@ -1,3 +1,4 @@
+import ee.ut.math.tvt.salessystem.SalesSystemException;
 import ee.ut.math.tvt.salessystem.dao.InMemorySalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
@@ -25,17 +26,38 @@ public class PurchaseTest {
     }
 
     @Test
-    public void testShoppingCartContentsAfterConfirmingOrder(){
+    public void testAddingNewItem(){
         shoppingCart.addItem(new SoldItem(viin, 1));
-        shoppingCart.submitCurrentPurchase();
-        assertTrue(shoppingCart.getAll().isEmpty());
+        assertFalse(shoppingCart.getAll().isEmpty());
     }
 
     @Test
-    public void testShoppingCartContentsAfterCancelingOrder(){
+    public void testAddingExistingItem(){
         shoppingCart.addItem(new SoldItem(viin, 1));
-        shoppingCart.cancelCurrentPurchase();
-        assertTrue(shoppingCart.getAll().isEmpty());
+        shoppingCart.addItem(new SoldItem(viin, 1));
+        assertEquals(2, shoppingCart.getAll().get(0).getQuantity(), 0);
+    }
+
+    @Test
+    public void testAddingItemWithNegativeQuantity(){
+        assertThrows(SalesSystemException.class, () -> {
+            shoppingCart.addItem(new SoldItem(pitsa, -2));
+        });
+    }
+
+    @Test
+    public void testAddingItemWithQuantityTooLarge(){
+        assertThrows(SalesSystemException.class, () -> {
+            shoppingCart.addItem(new SoldItem(pitsa, 100));
+        });
+    }
+
+    @Test
+    public void testAddingItemWithQuantitySumTooLarge(){
+        shoppingCart.addItem(new SoldItem(pitsa, 10));
+        assertThrows(SalesSystemException.class, () -> {
+            shoppingCart.addItem(new SoldItem(pitsa, 1));
+        });
     }
 
     @Test
