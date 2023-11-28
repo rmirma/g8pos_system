@@ -22,7 +22,7 @@ public class StockItem {
     @Column(name = "quantity")
     private int quantity;
 
-    @OneToMany(mappedBy = "stockItem")
+    @OneToMany(mappedBy = "stockItem", cascade = CascadeType.ALL)
     private List<SoldItem> soldItem;
     public StockItem() {
     }

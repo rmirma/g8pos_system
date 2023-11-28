@@ -1,6 +1,5 @@
 package ee.ut.math.tvt.salessystem.ui.controllers;
 
-import ee.ut.math.tvt.salessystem.SalesSystemException;
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 import ee.ut.math.tvt.salessystem.logic.Warehouse;
@@ -11,7 +10,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -20,6 +18,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -84,17 +84,27 @@ public class StockController implements Initializable {
 
     @FXML
     public void refreshButtonClicked() {
-        refreshStockItems();
         warehouseTableView.getSelectionModel().clearSelection();
+        refreshStockItems();
         log.info("Stock items refreshed");
     }
 
     private void refreshStockItems() {
-        warehouseTableView.setItems(FXCollections.observableList(dao.findStockItems()));
+        List<StockItem> stockItems = dao.findStockItems();
+        Iterator<StockItem> iterator = stockItems.iterator();
+        while (iterator.hasNext()) {
+            StockItem item = iterator.next();
+            if (item.getQuantity() == 0) {
+                warehouse.removeItem(item.getId());
+                iterator.remove();
+            }
+        }
+        warehouseTableView.setItems(FXCollections.observableList(stockItems));
         purchaseController.comboBox.getItems().clear();
-        purchaseController.comboBox.setItems(FXCollections.observableList(dao.findStockItems()));
+        purchaseController.comboBox.setItems(FXCollections.observableList(stockItems));
         warehouseTableView.refresh();
     }
+
 
     @FXML
     protected void addProductButtonClicked() {

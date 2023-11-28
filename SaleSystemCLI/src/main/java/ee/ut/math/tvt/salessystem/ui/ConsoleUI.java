@@ -1,7 +1,7 @@
 package ee.ut.math.tvt.salessystem.ui;
 
 import ee.ut.math.tvt.salessystem.SalesSystemException;
-import ee.ut.math.tvt.salessystem.dao.InMemorySalesSystemDAO;
+import ee.ut.math.tvt.salessystem.dao.HibernateSalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
@@ -37,8 +37,8 @@ public class ConsoleUI {
     }
 
     public static void main(String[] args) throws Exception {
-        SalesSystemDAO dao = new InMemorySalesSystemDAO();
-        //SalesSystemDAO dao = new HibernateSalesSystemDAO();
+        //SalesSystemDAO dao = new InMemorySalesSystemDAO();
+        SalesSystemDAO dao = new HibernateSalesSystemDAO();
         ConsoleUI console = new ConsoleUI(dao);
         console.run();
     }
@@ -69,7 +69,8 @@ public class ConsoleUI {
         List<StockItem> stockItems = dao.findStockItems();
         System.out.println("-------------------------");
         for (StockItem si : stockItems) {
-            System.out.println(si.getId() + " " + si.getName() + " " + si.getPrice() + "Euro (" + si.getQuantity() + " items)");
+            if (si.getQuantity() <= 0) removeProductFromWarehouse(String.valueOf(si.getId()));
+            else System.out.println(si.getId() + " " + si.getName() + " " + si.getPrice() + " Euro (" + si.getQuantity() + " items)");
         }
         if (stockItems.isEmpty()) {
             System.out.println("\tNothing");
@@ -81,8 +82,8 @@ public class ConsoleUI {
         log.info("Showing cart");
         System.out.println("-------------------------");
         for (SoldItem si : cart.getAll()) {
-            System.out.println(si.getName() + " " + si.getPrice() + "Euro (" + si.getQuantity() + " items)");
-            System.out.println("Sum: " + si.getSum() + "Euro");
+            System.out.println(si.getName() + " " + si.getPrice() + " Euro (" + si.getQuantity() + " items)");
+            System.out.println("Sum: " + si.getSum() + " Euro");
         }
         if (cart.getAll().isEmpty()) {
             System.out.println("\tNothing");
@@ -146,7 +147,6 @@ public class ConsoleUI {
             StockItem item = dao.findStockItem(idx);
             if (item != null) {
                 cart.addItem(new SoldItem(item, Math.min(amount, item.getQuantity())));
-                warehouse.addItem(idx, item.getName(), item.getDescription(), item.getPrice(), -amount);
                 System.out.println("Item successfully added to the cart.");
                 System.out.println("New total price is: " + cart.getTotalPrice());
             } else {
