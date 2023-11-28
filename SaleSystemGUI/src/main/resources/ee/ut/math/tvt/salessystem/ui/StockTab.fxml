@@ -60,7 +60,7 @@
             <TitledPane alignment="CENTER" animated="false" collapsible="false" layoutY="-4.0" text="Warehouse status" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <BorderPane styleClass="warehouseStatus">
                 <center>
-                  <TableView fx:id="warehouseTableView" onMouseClicked="#selectItemFromTable" styleClass="warehouseTable">
+                  <TableView fx:id="warehouseTableView" styleClass="warehouseTable">
                     <columns>
                       <TableColumn text="Id">
                         <cellValueFactory>

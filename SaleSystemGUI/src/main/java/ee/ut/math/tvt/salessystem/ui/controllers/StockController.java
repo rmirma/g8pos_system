@@ -1,8 +1,6 @@
 package ee.ut.math.tvt.salessystem.ui.controllers;
 
-import ee.ut.math.tvt.salessystem.SalesSystemException;
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
-import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 import ee.ut.math.tvt.salessystem.logic.Warehouse;
 import ee.ut.math.tvt.salessystem.ui.SalesSystemUI;
@@ -133,16 +131,12 @@ public class StockController implements Initializable {
 
     @FXML
     private void removeButtonClicked() {
+        barCodeField.setDisable(false);
         StockItem selectedItem = barCodeField.getText().isEmpty() ? warehouseTableView.getSelectionModel().getSelectedItem() : getStockItemByBarcode();
         assert selectedItem != null;
         warehouse.removeItem(selectedItem.getId());
         refreshStockItems();
         resetProductField();
-    }
-    @FXML
-    private void selectItemFromTable(){
-        StockItem stockItem = warehouseTableView.getSelectionModel().getSelectedItem();
-        System.out.println(stockItem);
     }
 
     private void resetProductField() {
