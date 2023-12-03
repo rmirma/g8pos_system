@@ -1,6 +1,6 @@
 package ee.ut.math.tvt.salessystem.ui;
 
-import ee.ut.math.tvt.salessystem.dao.HibernateSalesSystemDAO;
+import ee.ut.math.tvt.salessystem.dao.InMemorySalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
 import ee.ut.math.tvt.salessystem.logic.ShoppingCart;
@@ -37,8 +37,8 @@ public class SalesSystemUI extends Application {
     private final ShoppingCart shoppingCart;
 
     public SalesSystemUI() {
-        //dao = new InMemorySalesSystemDAO();
-        dao = new HibernateSalesSystemDAO();
+        dao = new InMemorySalesSystemDAO();
+        //dao = new HibernateSalesSystemDAO();
         shoppingCart = new ShoppingCart(dao);
         alert.setResizable(false);
         alert.setTitle("Input Error");    //can be changed on callout

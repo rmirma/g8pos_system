@@ -1,7 +1,7 @@
 package ee.ut.math.tvt.salessystem.ui;
 
 import ee.ut.math.tvt.salessystem.SalesSystemException;
-import ee.ut.math.tvt.salessystem.dao.HibernateSalesSystemDAO;
+import ee.ut.math.tvt.salessystem.dao.InMemorySalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dao.SalesSystemDAO;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Properties;
@@ -37,8 +38,8 @@ public class ConsoleUI {
     }
 
     public static void main(String[] args) throws Exception {
-        //SalesSystemDAO dao = new InMemorySalesSystemDAO();
-        SalesSystemDAO dao = new HibernateSalesSystemDAO();
+        SalesSystemDAO dao = new InMemorySalesSystemDAO();
+        //SalesSystemDAO dao = new HibernateSalesSystemDAO();
         ConsoleUI console = new ConsoleUI(dao);
         console.run();
     }
@@ -68,10 +69,14 @@ public class ConsoleUI {
         log.info("Showing stock");
         List<StockItem> stockItems = dao.findStockItems();
         System.out.println("-------------------------");
+        List<StockItem> itemsToRemove = new ArrayList<>();
         for (StockItem si : stockItems) {
-            if (si.getQuantity() <= 0) removeProductFromWarehouse(String.valueOf(si.getId()));
+            if (si.getQuantity() <= 0) {
+                itemsToRemove.add(si);
+            }
             else System.out.println(si.getId() + " " + si.getName() + " " + si.getPrice() + " Euro (" + si.getQuantity() + " items)");
         }
+        itemsToRemove.forEach(stockItems::remove);
         if (stockItems.isEmpty()) {
             System.out.println("\tNothing");
         }

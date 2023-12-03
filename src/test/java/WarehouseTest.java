@@ -68,15 +68,13 @@ public class WarehouseTest{
     @Test
     public void testAddingItemWithNegativeQuantity(){
         assertThrows(IllegalArgumentException.class, () -> {
-            StockItem newItem = new StockItem(6L, "Test", "Test", 10.0, -1);
-            dao.saveStockItem(newItem);
+            warehouse.addItem(5L, "Test", "Test", 10.0, -1);
         });
     }
     @Test
     public void testAddingItemWithNegativePrice(){
         assertThrows(IllegalArgumentException.class, () -> {
-            StockItem newItem = new StockItem(6L, "Test", "Test", -1, 50);
-            dao.saveStockItem(newItem);
+            warehouse.addItem(5L, "Test", "Test", -10.0, 1);
         });
     }
 }
