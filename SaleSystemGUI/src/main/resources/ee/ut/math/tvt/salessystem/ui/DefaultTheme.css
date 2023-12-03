@@ -89,13 +89,6 @@
 }
 
 /*
- * BorderPane
- */
-
-.border-pane .background_style{
-}
-
-/*
  * SplitPane
  */
 
@@ -111,13 +104,6 @@
  * TableView
  */
 
-.table-view {
-  -fx-base: transparent;
-  /*-fx-background-image: url("bk-bot.png");*/
-  -fx-table-header-border-color: transparent;
-  -fx-padding: 0;
-}
-
 .warehouseTable{
   -fx-base: transparent;
   -fx-background-color: transparent;
@@ -125,8 +111,10 @@
   -fx-border-color: black;
 }
 
-.warehouseStatus{
-  /*-fx-background-image: url("bk-bot.png");*/
+.table-view {
+  -fx-base: transparent;
+  -fx-table-header-border-color: transparent;
+  -fx-padding: 0;
 }
 
 .table-row-cell .table-cell {
@@ -151,12 +139,11 @@
 .table-view .column-header, .table-view .filler {
   -fx-size: 35;
   -fx-border-width: 0 1 1 1;
-  -fx-border-color: black;
+  -fx-border-color: transparent;
 }
 
 .table-view .column-header{
   -fx-background-color: control_color;
-  -fx-background-radius: 7px;
 }
 
 .table-view .column-header .label {
@@ -168,15 +155,12 @@
   -fx-background-color: -fx-focus-color;
 }
 
-/*
-.table-view .placeholder {
-  -fx-background-color: #ff0;
-}
-
- */
-
 .table-row-cell .text {
   -fx-fill: main_text_color ;
+}
+
+.table-view .arrow{
+  -fx-background-color: black;
 }
 
 /*

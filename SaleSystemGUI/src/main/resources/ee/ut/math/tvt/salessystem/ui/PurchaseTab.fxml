@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
 
   <SplitPane dividerPositions="0.4" orientation="VERTICAL" prefHeight="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
     <items>
@@ -98,6 +98,12 @@
                         <ColumnConstraints />
                         <ColumnConstraints />
                         <ColumnConstraints />
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                        <ColumnConstraints />
+                        <ColumnConstraints />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -110,6 +116,12 @@
               </rowConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
                         <RowConstraints />
                         <RowConstraints />
                         <RowConstraints />
@@ -193,7 +205,7 @@
                       <content>
                         <TableView fx:id="purchaseTableView" onMouseClicked="#selectItemFromTable">
                           <columns>
-                            <TableColumn text="Id">
+                            <TableColumn style="-fx-background-radius: 7px 0 0 7px;" text="Id">
                               <cellValueFactory>
                                 <PropertyValueFactory property="id" />
                               </cellValueFactory>
@@ -213,7 +225,7 @@
                                 <PropertyValueFactory property="quantity" />
                               </cellValueFactory>
                             </TableColumn>
-                              <TableColumn text="Sum">
+                              <TableColumn style="-fx-background-radius: 0 7px 7px 0;" text="Sum">
                                   <cellValueFactory>
                                       <PropertyValueFactory property="sum" />
                                   </cellValueFactory>

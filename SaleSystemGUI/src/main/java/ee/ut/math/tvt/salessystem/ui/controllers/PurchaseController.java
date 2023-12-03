@@ -130,6 +130,8 @@ public class PurchaseController implements Initializable {
     @FXML
     public void selectItemFromTable(){
         SoldItem soldItem = purchaseTableView.getSelectionModel().getSelectedItem();
+        if(soldItem == null) // for if we sort the table
+            return;
         barCodeField.setText(Long.toString(soldItem.getId()));
         priceField.setText(Double.toString(soldItem.getPrice()));
         quantityField.setText(Integer.toString(soldItem.getQuantity()));
@@ -276,5 +278,6 @@ public class PurchaseController implements Initializable {
     private void disableInputs() {
         resetProductField();
         disableProductField();
+        newPurchase.setDisable(false);
     }
 }

@@ -108,8 +108,11 @@ public class ShoppingCart {
      * Submits the ongoing purchase, saving the data into the database
      */
     public void submitCurrentPurchase() {
-        if(items.isEmpty())
+        if(items.isEmpty()){
+            dao.beginTransaction();
+            dao.commitTransaction();
             return;
+        }
         dao.beginTransaction();
         HistoryItem history = new HistoryItem(new ArrayList<>(), LocalDate.now(), LocalTime.now(), totalPrice);
         try {
