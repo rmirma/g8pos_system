@@ -24,6 +24,8 @@ https://bitbucket.org/ajutinenimi/lg8-javaenjoyers/commits/tag/homework-5
 ## Homework 6:
 https://bitbucket.org/ajutinenimi/lg8-javaenjoyers/wiki/hw6
 
+https://bitbucket.org/ajutinenimi/lg8-javaenjoyers/commits/tag/homework-6
+
 ## Homework 7:
 <Links to the solution>
 
