@@ -152,12 +152,11 @@ public class HistoryController implements Initializable {
     public void showShoppingCartContents(){
         try{
             HistoryItem contentsToFind = HistoryView.getSelectionModel().getSelectedItem();
-            ShoppingCartView.setItems(FXCollections.observableList(dao.findContentsOfPurchase(contentsToFind))); //TODO NOT WORKING
+            ShoppingCartView.setItems(FXCollections.observableList(dao.findContentsOfPurchase(contentsToFind)));
             log.info("contents of purchase " + HistoryView.getSelectionModel().getSelectedItem().getDate() +
                     " " + HistoryView.getSelectionModel().getSelectedItem().getTime() + " shown");
             ShoppingCartView.refresh();
         }catch (Exception e){
-            //throw new SalesSystemException("error with loading contenst from selected purchase");
             log.error("error loading shoppingCartContents, reffer to showShoppingCartContents() in HistoryController");
             }
         }

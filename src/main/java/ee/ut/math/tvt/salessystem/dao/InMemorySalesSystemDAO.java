@@ -58,11 +58,15 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
 
     @Override
     public List<SoldItem> findContentsOfPurchase(HistoryItem item) {
-        return null;
+        return item.getSoldItems();
     }
 
     @Override
     public List<SoldItem> findContentsOfPurchase(LocalDate date, LocalTime time) {
+        for (HistoryItem historyItem : historyList) {
+            if (historyItem.getDate().equals(date) && historyItem.getTime().equals(time))
+                return historyItem.getSoldItems();
+        }
         return null;
     }
 
