@@ -3,8 +3,10 @@ package ee.ut.math.tvt.salessystem.dao;
 import ee.ut.math.tvt.salessystem.dataobjects.HistoryItem;
 import ee.ut.math.tvt.salessystem.dataobjects.SoldItem;
 import ee.ut.math.tvt.salessystem.dataobjects.StockItem;
+import net.bytebuddy.asm.Advice;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +22,19 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
         items.add(new StockItem(2L, "Chupa-chups", "Sweets", 8.0, 8));
         items.add(new StockItem(3L, "Frankfurters", "Beer sausages", 15.0, 12));
         items.add(new StockItem(4L, "Free Beer", "Student's delight", 0.0, 100));
-
         this.stockItemList = items;
         this.historyList = new ArrayList<>();
+        List<SoldItem> soldItems = List.of(new SoldItem(stockItemList.get(0), 1), new SoldItem(stockItemList.get(1), 1), new SoldItem(stockItemList.get(2), 1));
+        double total = 0;
+        for (SoldItem soldItem : soldItems) {
+            total += soldItem.getSum();
+        }
+        LocalDate date = LocalDate.of(2023, 12, 11);
+        LocalTime time = LocalTime.now();
+        historyList.add(new HistoryItem(soldItems, date, time, total));
+        date = LocalDate.of(2023, 12, 2);
+        time = LocalTime.of(15, 30, 25);
+        historyList.add(new HistoryItem(soldItems, date, time, total));
     }
 
     @Override
@@ -48,12 +60,25 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
 
     @Override
     public List<HistoryItem> getHistoryListLast10() {
-        return null;
+        int i = 10;
+        List<HistoryItem> last10 = new ArrayList<>();
+        for (int j = 0; j < historyList.size(); j++,i--) {
+            if(i==0)
+                break;
+            last10.add(historyList.get(j));
+        }
+        return last10;
     }
 
     @Override
     public List<HistoryItem> getHistoryItemBetweenDates(LocalDate start, LocalDate end) {
-        return null;
+        List<HistoryItem> betweenDates = new ArrayList<>();
+        for (HistoryItem historyItem : historyList) {
+            // not before == equal or after, not after == equal or before
+            if(!historyItem.getDate().isBefore(start) && !historyItem.getDate().isAfter(end))
+                betweenDates.add(historyItem);
+        }
+        return betweenDates;
     }
 
     @Override
