@@ -124,6 +124,9 @@ public class SalesSystemUI extends Application {
         alert.show();
     }
 
+    public static void main (String [] args) {
+        launch (args);
+    }
 }
 
 
