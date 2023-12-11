@@ -10,6 +10,7 @@ import ee.ut.math.tvt.salessystem.ui.controllers.PurchaseController;
 import ee.ut.math.tvt.salessystem.ui.controllers.StockController;
 import ee.ut.math.tvt.salessystem.ui.controllers.TeamController;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -29,7 +30,7 @@ import java.net.URL;
  * Graphical user interface of the sales system.
  */
 public class SalesSystemUI extends Application {
-    public static Alert alert = new Alert(Alert.AlertType.ERROR,"");
+    // public static Alert alert = new Alert(Alert.AlertType.ERROR,"");
 
     private static final Logger log = LogManager.getLogger(SalesSystemUI.class);
 
@@ -40,14 +41,15 @@ public class SalesSystemUI extends Application {
         dao = new InMemorySalesSystemDAO();
         //dao = new HibernateSalesSystemDAO();
         shoppingCart = new ShoppingCart(dao);
-        alert.setResizable(false);
-        alert.setTitle("Input Error");    //can be changed on callout
-        alert.setOnCloseRequest(event -> {
-            alert.setContentText("placeholder for new content");
-            alert.setTitle("placeholder for new title");
-            System.out.println(alert.getContentText());  //for testing
-        });
+        // alert.setResizable(false);
+        //  alert.setTitle("Input Error");    //can be changed on callout
+        // alert.setOnCloseRequest(event -> {
+        //     alert.setContentText("placeholder for new content");
+        //      alert.setTitle("placeholder for new title");
+        //      System.out.println(alert.getContentText());  //for testing
+        // });
     }
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -105,6 +107,10 @@ public class SalesSystemUI extends Application {
         log.info("Salesystem GUI started");
     }
 
+    public static void main (String [] args) {
+        launch (args);
+    }
+
     private Node loadControls(String fxml, Initializable controller) throws IOException {
         URL resource = getClass().getResource(fxml);
         if (resource == null) {
@@ -117,16 +123,13 @@ public class SalesSystemUI extends Application {
     }
 
     public static void showAlert(String header, String message){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("ERROR");
-        alert.setHeaderText(header);
-        alert.setContentText(message);
-        alert.show();
-    }
-
-    public static void main (String [] args) {
-        launch (args);
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ERROR");
+            alert.setHeaderText(header);
+            alert.setContentText(message);
+            alert.setResizable(false);
+            alert.show();
+        });
     }
 }
-
-

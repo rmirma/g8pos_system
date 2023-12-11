@@ -102,7 +102,8 @@ public class PurchaseTest {
         shoppingCart.addItem(new SoldItem(kondoomid, 2));
         shoppingCart.addItem(new SoldItem(pitsa, 3));
         shoppingCart.submitCurrentPurchase();
-        HistoryItem historyItem = dao.getHistoryList().get(0);
+        int lastIndexOfHistoryList = dao.getHistoryList().size()-1;
+        HistoryItem historyItem = dao.getHistoryList().get(lastIndexOfHistoryList);
         boolean historyItemIsCorrect = true;
         SoldItem item1 = historyItem.getSoldItems().get(0);
         SoldItem item2 = historyItem.getSoldItems().get(1);
@@ -128,7 +129,8 @@ public class PurchaseTest {
         shoppingCart.cancelCurrentPurchase();
         shoppingCart.addItem(new SoldItem(pitsa, 5));
         shoppingCart.submitCurrentPurchase();
-        SoldItem item = dao.getHistoryList().get(0).getSoldItems().get(0);
+        int lastIndexOfHistoryList = dao.getHistoryList().size()-1;
+        SoldItem item = dao.getHistoryList().get(lastIndexOfHistoryList).getSoldItems().get(0);
         assertTrue(item.getId()==7&&item.getQuantity()==5);
     }
 

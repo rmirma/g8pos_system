@@ -11,7 +11,7 @@ import java.time.LocalTime;
 import java.util.List;
 @Entity
 @Table(name = "HISTORY")
-public class HistoryItem {
+public class HistoryItem{
 
     @Id
     @GeneratedValue()

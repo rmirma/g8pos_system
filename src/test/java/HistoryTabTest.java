@@ -6,9 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -67,9 +66,23 @@ public class HistoryTabTest{
         dao.saveHistoryItem(newHistory10);
         dao.saveHistoryItem(newHistory11);
 
-        testItems = Arrays.asList(newHistory1,newHistory2,newHistory3,newHistory4,newHistory5,newHistory6,newHistory7,newHistory8,newHistory9,newHistory10,newHistory11);
-        historyItemList.sort(Comparator.comparing(HistoryItem::getTime));
-        testItems.sort(Comparator.comparing(HistoryItem::getTime));
+        Comparator<HistoryItem> dateAndTimeComparator = new Comparator<HistoryItem>() {
+            @Override
+            public int compare(HistoryItem historyItem, HistoryItem historyItem2) {
+                if(historyItem.getDate().isBefore(historyItem2.getDate()))
+                    return -1;
+                else if(historyItem.getDate().equals(historyItem2.getDate())){
+                    if(historyItem.getTime().isBefore(historyItem2.getTime())) return -1;
+                    else if(historyItem.getTime().equals(historyItem2.getTime())) return 0;
+                    else return 1;
+                }
+                else return 1;
+            }
+        };
+
+        testItems = Arrays.asList(historyItemList.get(0),historyItemList.get(1),newHistory1,newHistory2,newHistory3,newHistory4,newHistory5,newHistory6,newHistory7,newHistory8,newHistory9,newHistory10,newHistory11);
+        historyItemList.sort(dateAndTimeComparator);
+        testItems.sort(dateAndTimeComparator);
         //TODO add FXMLoader to test the date method.
 
     }
