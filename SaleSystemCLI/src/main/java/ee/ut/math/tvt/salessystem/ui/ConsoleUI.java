@@ -152,7 +152,7 @@ public class ConsoleUI {
             StockItem item = dao.findStockItem(idx);
             if (item != null) {
                 if (amount > item.getQuantity()) {
-                    throw new SalesSystemException("Not enough items in stock.");
+                    throw new SalesSystemException("Not enough items in stock. Retry with smaller quantity value.");
                 }else{
                     cart.addItem(new SoldItem(item, Math.min(amount, item.getQuantity())));
                     System.out.println("Item successfully added to the cart.");
