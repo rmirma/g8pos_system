@@ -151,9 +151,13 @@ public class ConsoleUI {
             int amount = Integer.parseInt(c[2]);
             StockItem item = dao.findStockItem(idx);
             if (item != null) {
-                cart.addItem(new SoldItem(item, Math.min(amount, item.getQuantity())));
-                System.out.println("Item successfully added to the cart.");
-                System.out.println("New total price is: " + cart.getTotalPrice());
+                if (amount > item.getQuantity()) {
+                    throw new SalesSystemException("Not enough items in stock.");
+                }else{
+                    cart.addItem(new SoldItem(item, Math.min(amount, item.getQuantity())));
+                    System.out.println("Item successfully added to the cart.");
+                    System.out.println("New total price is: " + cart.getTotalPrice());
+                }
             } else {
                 System.out.println("no stock item with id " + idx + " found.");
             }
