@@ -29,10 +29,10 @@ public class InMemorySalesSystemDAO implements SalesSystemDAO {
         for (SoldItem soldItem : soldItems) {
             total += soldItem.getSum();
         }
-        LocalDate date = LocalDate.of(2023, 11, 11);
+        LocalDate date = LocalDate.of(2023, 12, 5);
         LocalTime time = LocalTime.now();
         historyList.add(new HistoryItem(soldItems, date, time, total));
-        date = LocalDate.of(2023, 11, 2);
+        date = LocalDate.of(2023, 12, 2);
         time = LocalTime.of(15, 30, 25);
         historyList.add(new HistoryItem(soldItems, date, time, total));
     }
