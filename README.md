@@ -29,4 +29,7 @@ https://bitbucket.org/ajutinenimi/lg8-javaenjoyers/commits/tag/homework-6
 ## Homework 7:
 https://bitbucket.org/ajutinenimi/lg8-javaenjoyers/wiki/hw7
 
+Testing : https://bitbucket.org/ajutinenimi/lg8-javaenjoyers/src/master/HW7%20Task%201.pdf
+Must download
+
 We encourage you to use [markdown syntax](https://confluence.atlassian.com/bitbucketserver/markdown-syntax-guide-776639995.html)
